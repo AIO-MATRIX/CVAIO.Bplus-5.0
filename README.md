@@ -1,4 +1,4 @@
-**CVAIO B+ ----- Machine Vision Platform**
+**CVAIO B+ <-----> Machine Vision Platform**
 
 Với mục tiêu giảm thiểu thời gian phát triển một chương trình Machine Vision cũng như cắt giảm tối đa chi phí phát sinh trong quá trình đưa một thuật toán xử lý ảnh vào áp dụng trong nhà máy, AIO MATRIX cung cấp một nền tảng Machine Vision Platform CVAiO B+ dựa trên mã nguồn mở OpenCV. Thông qua thao tác bốc thả (Drag&Drop), người dùng có thể dễ dàng thêm hoặc bớt đi các luồng xử lý ảnh. Cùng với sự linh hoạt của công cụ điều phối (Scheduler), các thuật toán xử lý ảnh có thể được tiến hành lần lượt (Multi-Shot) trước khi kết quả cuối cùng được tổng hợp và phán định bởi công cụ Algorithm. Thêm vào đó là việc tích hợp tính năng căn chỉnh tự động (Auto Calibration) giúp cho việc điều hướng robot tìm gắp vật thể đơn giản và dễ dàng hơn bao giờ hết
 
