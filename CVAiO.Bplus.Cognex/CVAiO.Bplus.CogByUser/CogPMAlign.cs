@@ -118,9 +118,9 @@ namespace CVAiO.Bplus.CogByUser
 
         public CogPMAlign()
         {
-            toolName = "Cognex PMAlign";
+            toolName = "(C) PMAlign";
             toolGroup = "Cognex Vision"; // Don't change tool Group
-            name = "Cognex PMAlign";
+            name = "(C) PMAlign";
             RunParams.Changed += RunParams_Changed;
             RunParams.StartPose.Changed += RunParams_Changed;
             RunParams.ZoneScaleX.Changed += RunParams_Changed;

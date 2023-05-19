@@ -109,9 +109,9 @@ namespace CVAiO.Bplus.CogByUser
 
         public CogFindLine()
         {
-            toolName = "Cognex Find Line";
+            toolName = "(C) Find Line";
             toolGroup = "Cognex Vision"; // Don't change tool Group
-            name = "Cognex Find Line";
+            name = "(C) Find Line";
             RunParams.Changed += RunParams_Changed;
             RunParams.CaliperRunParams.Changed += RunParams_Changed;
             RunParams.ExpectedLineSegment.Changed += RunParams_Changed;
