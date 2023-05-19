@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{333DE2AA-331F-42BB-A52E-A426DD734EAB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CVAiO.Bplus.Algorithm.Controls</RootNamespace>
+    <AssemblyName>CVAiO.Bplus.Algorithm.Controls</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>..\..\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CVAiO.Bplus.Algorithm, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Output\CVAiO.Bplus.Algorithm.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="CVAiO.Bplus.Core">
+      <HintPath>..\..\Debug\CVAiO.Bplus.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AlgoTapeAlign2P_Object2TargetEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AlgoTapeAlign2P_Object2TargetEdit.Designer.cs">
+      <DependentUpon>AlgoTapeAlign2P_Object2TargetEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AlgoObjectAlign2PEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AlgoObjectAlign2PEdit.Designer.cs">
+      <DependentUpon>AlgoObjectAlign2PEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AlgoObjectAlign1PEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AlgoObjectAlign1PEdit.Designer.cs">
+      <DependentUpon>AlgoObjectAlign1PEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AlgoInspectAIEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AlgoInspectAIEdit.Designer.cs">
+      <DependentUpon>AlgoInspectAIEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AlgoStandardEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AlgoStandardEdit.Designer.cs">
+      <DependentUpon>AlgoStandardEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AlgoTapeAlign2P_Object2TargetEdit.resx">
+      <DependentUpon>AlgoTapeAlign2P_Object2TargetEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AlgoObjectAlign2PEdit.resx">
+      <DependentUpon>AlgoObjectAlign2PEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AlgoObjectAlign1PEdit.resx">
+      <DependentUpon>AlgoObjectAlign1PEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AlgoInspectAIEdit.resx">
+      <DependentUpon>AlgoInspectAIEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AlgoStandardEdit.resx">
+      <DependentUpon>AlgoStandardEdit.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterCompile">
+    <Exec Command="if &quot;$(ConfigurationName)&quot; == &quot;Release&quot; (&quot;$(ProjectDir)_ConfuserEx\Confuser.CLI.exe&quot; &quot;$(ProjectDir)_ConfuserEx\c.crproj&quot;)&#xD;&#xA;" />
+  </Target>
+</Project>

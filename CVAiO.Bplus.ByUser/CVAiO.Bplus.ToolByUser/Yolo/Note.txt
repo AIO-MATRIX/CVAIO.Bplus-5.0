@@ -1,0 +1,4 @@
+﻿- Đây là các class liên quan đến việc sử dụng YoloV7 trong việc kiểm tra phát hiện lỗi.
+- Cần phải cài đặt OnnxRuntime sau đó gỡ comment trong các lớp YoloV7, Ultils
+- Việc phán định của AI đã được lập trình trong tool InspectionAI
+- Lên hệ AIO MATRIX - www.aiomatrix.com hoặc 035.831.2826 để được hỗ trợ chi tiết

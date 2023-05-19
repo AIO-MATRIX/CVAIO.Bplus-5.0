@@ -1,0 +1,20 @@
+*Basler Camera: Basler_pylon_5.0.12.11830
+	https://drive.google.com/file/d/1IqYd0fT8ggBNPhvKBMx9QQdwA1ILM0he/view?usp=share_link
+
+*Dahua Camera: MVviewer_2.3.1_Build20210929
+	https://drive.google.com/file/d/1z8h-iv7Rd9tHYb3CqK4gJfYcijoWn9qE/view?usp=share_link
+
+*IMI Camera: Neptune_Install_x86_64_v5.1.0.7
+	https://drive.google.com/file/d/17iRbVIyDGP5q8v2mFqHQgeQaDfTufidu/view?usp=share_link
+
+*Hikvision Camera: 
+	https://drive.google.com/file/d/1XquCZ1NukJM41c8HIyJoWDOM1F5Fbn_d/view?usp=share_link
+
+*VC++ redistributable 2015
+	https://drive.google.com/file/d/1LpRwRKxmLOK9o3gAA3Ys0hdPCCWneaI9/view?usp=share_link
+
+*.Net Framework 4.8 Runtime
+	https://drive.google.com/file/d/1yfMlgijRQ15YZS5dRZFA8HKSWcj9lYAf/view?usp=share_link
+
+*.Net Framework 4.8 Development
+	https://drive.google.com/file/d/1UiYI78rHFpXFTmmXr9-PL5oPW518FcFt/view?usp=share_link
