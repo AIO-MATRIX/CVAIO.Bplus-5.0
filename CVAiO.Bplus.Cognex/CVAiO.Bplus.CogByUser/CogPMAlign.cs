@@ -29,6 +29,8 @@ namespace CVAiO.Bplus.CogByUser
         private MatchingResult matchingResult;
         [NonSerialized]
         private CogPMAlignTool cogPMAlignTool;
+        [NonSerialized]
+        private List<Point3f> calibPoint; // Use for Auto Calibration
         #endregion
 
         #region Properties
@@ -114,6 +116,18 @@ namespace CVAiO.Bplus.CogByUser
             set => cogPMAlignTool = value;
         }
 
+        [OutputParam, Browsable(false)]
+        public List<Point3f> CalibPoint
+        {
+            get
+            {
+                List<Point3f> point3fs = new List<Point3f>();
+                point3fs.Add(new Point3f((float)MatchingResult.CP.X, (float)MatchingResult.CP.Y, (float)MatchingResult.CP.Z));
+                calibPoint = point3fs;
+                return calibPoint;
+            }
+            set => calibPoint = value;
+        }
         #endregion
 
         public CogPMAlign()
