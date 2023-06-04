@@ -247,7 +247,7 @@ namespace CVAiO.Bplus.Algorithm
 
                 // Tính toán theo đơn vị mm sau khi đã nhân ma trận căn chỉnh
                 Point2f targetLeft = AiO.VtoR(calibMatrix1, TarPoint1.Point);
-                Point2f targetRight = AiO.VtoR(calibMatrix1, TarPoint2.Point);
+                Point2f targetRight = AiO.VtoR(calibMatrix2, TarPoint2.Point);
                 TarLine.SP = new Point2d(targetLeft.X, targetLeft.Y);
                 TarLine.EP = new Point2d(targetRight.X, targetRight.Y);
                 Point3f targetTape = new Point3f();
@@ -261,7 +261,7 @@ namespace CVAiO.Bplus.Algorithm
                 tarOrigin.ThetaRad = targetTape.Z + RunParams.TarOffsetT;
 
                 Point2f objectLeft = AiO.VtoR(calibMatrix1, ObjPoint1.Point);
-                Point2f objectRight = AiO.VtoR(calibMatrix1, ObjPoint2.Point);
+                Point2f objectRight = AiO.VtoR(calibMatrix2, ObjPoint2.Point);
                 ObjLine.SP = new Point2d(objectLeft.X, objectLeft.Y);
                 ObjLine.EP = new Point2d(objectRight.X, objectRight.Y);
 
