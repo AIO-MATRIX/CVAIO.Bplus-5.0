@@ -92,9 +92,9 @@ namespace CVAiO.Bplus.GUI.ByUser
             {
                 // Start code here
                 // Send Object Position to PLC
-                IFCommunication.ComData.WriteValue((int)IFCommunication.DataAddr + 4, (int)((AlgorithmTool as AlgoTapeAlign2P_Object2Target).AlgoObject2Target.X * 1000));
-                IFCommunication.ComData.WriteValue((int)IFCommunication.DataAddr + 6, (int)((AlgorithmTool as AlgoTapeAlign2P_Object2Target).AlgoObject2Target.Y * 1000));
-                IFCommunication.ComData.WriteValue((int)IFCommunication.DataAddr + 8, (int)((AlgorithmTool as AlgoTapeAlign2P_Object2Target).AlgoObject2Target.ThetaRad * 1000));
+                IFCommunication.ComData.WriteValue((int)IFCommunication.DataAddr + 20, (int)((AlgorithmTool as AlgoTapeAlign2P_Object2Target).AlgoObject2Target.X * 1000));
+                IFCommunication.ComData.WriteValue((int)IFCommunication.DataAddr + 22, (int)((AlgorithmTool as AlgoTapeAlign2P_Object2Target).AlgoObject2Target.Y * 1000));
+                IFCommunication.ComData.WriteValue((int)IFCommunication.DataAddr + 24, (int)((AlgorithmTool as AlgoTapeAlign2P_Object2Target).AlgoObject2Target.ThetaRad * 1000));
                 // End code here
                 return true;
             }

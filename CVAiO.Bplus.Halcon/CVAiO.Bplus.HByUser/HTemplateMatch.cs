@@ -305,7 +305,7 @@ namespace CVAiO.Bplus.HByUser
 
             //Tham khảo https://www.mvtec.com/doc/halcon/12/en/create_shape_model.html
             HOperatorSet.CreateShapeModel(hImageTemplate, 4, RunParams.AngleNeg * Math.PI / 180, (RunParams.AnglePos - RunParams.AngleNeg) * Math.PI / 180, RunParams.MinStep * Math.PI / 180,
-                                                "auto", "use_polarity", "auto", 5, out hModelID);
+                                                "auto", "use_polarity", 10, 1, out hModelID);
 
             //Tham khảo https://www.mvtec.com/doc/halcon/12/en/find_shape_model.html
             HOperatorSet.FindShapeModel(hImage, hModelID, RunParams.AngleNeg * Math.PI / 180, (RunParams.AnglePos - RunParams.AngleNeg) * Math.PI / 180, RunParams.ScoreLimit,
@@ -354,6 +354,8 @@ namespace CVAiO.Bplus.HByUser
         private InteractRectangle searchRegion;
         private InteractRectangle trainRegion;
         private InteractCoordinate origin;
+        private int contrast;
+        private int minContrast;
 
         #endregion
 
@@ -430,6 +432,30 @@ namespace CVAiO.Bplus.HByUser
 
         [Description("Using SubPixel Accuracy"), PropertyOrder(40), Browsable(false)]
         public bool SubPixel { get => subPixel; set { if (subPixel == value) return; subPixel = value; NotifyPropertyChanged(nameof(SubPixel)); } }
+       
+        [Description("Threshold or hysteresis thresholds for the contrast of the object in the template image and optionally minimum size of the object parts"), PropertyOrder(41)]
+        public int Contrast 
+        { 
+            get => contrast;
+            set
+            {
+                if (contrast == value || value < MinContrast || value < 0 ) return;
+                contrast = value;
+                NotifyPropertyChanged(nameof(Contrast));
+            }
+        }
+
+        [Description("Minimum contrast of the objects in the search images. MinContrast < Contrast"), PropertyOrder(42)]
+        public int MinContrast 
+        { 
+            get => minContrast;
+            set 
+            {
+                if (minContrast == value || value > Contrast || value < 1) return;
+                minContrast = value;
+                NotifyPropertyChanged(nameof(MinContrast));
+            }
+        }
 
         #endregion
 
@@ -438,6 +464,8 @@ namespace CVAiO.Bplus.HByUser
             angleNeg = -20;
             anglePos = 20;
             minStep = 0.1;
+            contrast = 10;
+            minContrast = 1;
             patternDatas.Add(new PatternData());
             patternDatas.Add(new PatternData());
             patternDatas.Add(new PatternData());
