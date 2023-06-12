@@ -305,11 +305,11 @@ namespace CVAiO.Bplus.HByUser
 
             //Tham khảo https://www.mvtec.com/doc/halcon/12/en/create_shape_model.html
             HOperatorSet.CreateShapeModel(hImageTemplate, 4, RunParams.AngleNeg * Math.PI / 180, (RunParams.AnglePos - RunParams.AngleNeg) * Math.PI / 180, RunParams.MinStep * Math.PI / 180,
-                                                "auto", "use_polarity", 10, 1, out hModelID);
+                                                "auto", "use_polarity", RunParams.Contrast, RunParams.MinContrast, out hModelID);
 
             //Tham khảo https://www.mvtec.com/doc/halcon/12/en/find_shape_model.html
             HOperatorSet.FindShapeModel(hImage, hModelID, RunParams.AngleNeg * Math.PI / 180, (RunParams.AnglePos - RunParams.AngleNeg) * Math.PI / 180, RunParams.ScoreLimit,
-                1, 0.5, "least_squares", 0 , 0.9, out hRow, out hColumn, out hAngle, out hScore);
+                1, 0.5, "least_squares", 0 , 0.8, out hRow, out hColumn, out hAngle, out hScore);
 
             Point3f resultcp = new Point3f((float)hColumn.D + searchingRegion.Rect.X + 1, (float)hRow.D + searchingRegion.Rect.Y + 1, (float)-hAngle.D); // Cộng thêm offset của vùng region + 1 pixel do quá trình cắt region
             matchResult.Score = (float)hScore.D;
@@ -439,7 +439,7 @@ namespace CVAiO.Bplus.HByUser
             get => contrast;
             set
             {
-                if (contrast == value || value < MinContrast || value < 0 ) return;
+                if (contrast == value || value < MinContrast || value < 0  || value > 150) return;
                 contrast = value;
                 NotifyPropertyChanged(nameof(Contrast));
             }
@@ -464,7 +464,7 @@ namespace CVAiO.Bplus.HByUser
             angleNeg = -20;
             anglePos = 20;
             minStep = 0.1;
-            contrast = 10;
+            contrast = 100;
             minContrast = 1;
             patternDatas.Add(new PatternData());
             patternDatas.Add(new PatternData());

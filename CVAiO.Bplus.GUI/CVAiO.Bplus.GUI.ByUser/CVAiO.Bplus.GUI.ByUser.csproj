@@ -92,11 +92,20 @@
     <Compile Include="SchTapeAlign2P_Object2Target.cs" />
     <Compile Include="SchObjectAlign2P.cs" />
     <Compile Include="SchObjectAlign1P.cs" />
+    <Compile Include="SettingGUI\UserSetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingGUI\UserSetting.Designer.cs">
+      <DependentUpon>UserSetting.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingGUI\UserSetting.resx">
+      <DependentUpon>UserSetting.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
