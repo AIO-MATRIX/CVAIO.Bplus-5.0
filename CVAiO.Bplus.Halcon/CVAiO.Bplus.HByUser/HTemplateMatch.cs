@@ -10,7 +10,6 @@ using System.Runtime.Serialization;
 using CVAiO.Bplus.Halcon;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-using CVAiO.Bplus.TemplateMatch;
 
 namespace CVAiO.Bplus.HByUser
 {
@@ -39,6 +38,8 @@ namespace CVAiO.Bplus.HByUser
         private protected Rect matchingRegion;
         [NonSerialized]
         private List<Point3f> calibPoint; // Use for Auto Calibration
+        [NonSerialized]
+        private HTuple modelID;
         #endregion
 
         #region Properties
@@ -115,6 +116,20 @@ namespace CVAiO.Bplus.HByUser
                 return calibPoint;
             }
             set => calibPoint = value;
+        }
+
+        public HTuple ModelID 
+        {
+            get
+            {
+                if (modelID == null)
+                {
+                   
+                }
+                    
+                return modelID;
+            }
+            set => modelID = value;
         }
         #endregion
 
@@ -287,6 +302,12 @@ namespace CVAiO.Bplus.HByUser
         public override void Dispose()
         {
             InitOutProperty();
+            ////Free the memory of a shape model.
+            foreach (PatternData patternData in RunParams.PatternDatas)
+            {
+                if (patternData.ModelID != null) HOperatorSet.ClearTemplate(patternData.ModelID);
+                patternData.ModelID = null;
+            }
             if (InImage != null)
             {
                 InImage.Dispose();
@@ -299,18 +320,13 @@ namespace CVAiO.Bplus.HByUser
             HImage hImage = new HImage("byte", searchingImage.Width, searchingImage.Height, searchingImage.Data); // Chuyển đổi từ Mat (OpenCV) sang HImage (Halcon)
             matchResult = new MatchingResult(0, new Point3f(), new Point2f[4]);
 
-            HImage hImageTemplate = new HImage("byte", patternData.PatternImage.Width, patternData.PatternImage.Height, patternData.PatternImage.Mat.Data);
+            HTuple hRow, hColumn, hAngle, hScore;
+            // https://www.mvtec.com/doc/halcon/12/en/create_template_rot.html#Optimize
+            if (patternData.ModelID == null)
+                HOperatorSet.CreateTemplateRot(patternData.HImage, 4, RunParams.AngleNeg * Math.PI / 180, (RunParams.AnglePos - RunParams.AngleNeg) * Math.PI / 180, RunParams.MinStep * Math.PI / 180, RunParams.Optimize.ToString(), RunParams.GrayValues.ToString(), out patternData.ModelID);
 
-            HTuple hModelID, hRow, hColumn, hAngle, hScore;
-
-            //Tham khảo https://www.mvtec.com/doc/halcon/12/en/create_shape_model.html
-            HOperatorSet.CreateShapeModel(hImageTemplate, 4, RunParams.AngleNeg * Math.PI / 180, (RunParams.AnglePos - RunParams.AngleNeg) * Math.PI / 180, RunParams.MinStep * Math.PI / 180,
-                                                "auto", "use_polarity", RunParams.Contrast, RunParams.MinContrast, out hModelID);
-
-            //Tham khảo https://www.mvtec.com/doc/halcon/12/en/find_shape_model.html
-            HOperatorSet.FindShapeModel(hImage, hModelID, RunParams.AngleNeg * Math.PI / 180, (RunParams.AnglePos - RunParams.AngleNeg) * Math.PI / 180, RunParams.ScoreLimit,
-                1, 0.5, "least_squares", 0 , 0.8, out hRow, out hColumn, out hAngle, out hScore);
-
+            // https://www.mvtec.com/doc/halcon/12/en/best_match_rot.html
+            HOperatorSet.BestMatchRot(hImage, patternData.ModelID, RunParams.AngleNeg * Math.PI / 180, (RunParams.AnglePos - RunParams.AngleNeg) * Math.PI / 180, 10, RunParams.SubPixel.ToString(), out hRow, out hColumn, out hAngle, out hScore) ;
             Point3f resultcp = new Point3f((float)hColumn.D + searchingRegion.Rect.X + 1, (float)hRow.D + searchingRegion.Rect.Y + 1, (float)-hAngle.D); // Cộng thêm offset của vùng region + 1 pixel do quá trình cắt region
             matchResult.Score = (float)hScore.D;
             matchResult.Box = Origin2Box(resultcp, patternData.PatternImage.Width, patternData.PatternImage.Height);
@@ -318,7 +334,7 @@ namespace CVAiO.Bplus.HByUser
             float offsetY = RunParams.Origin.Y - patternData.PatternCP.Y;
             matchResult.CP = resultcp
                              + new Point3f((float)(offsetX * Math.Cos(resultcp.Z) - offsetY * Math.Sin(resultcp.Z)), (float)(offsetX * Math.Sin(resultcp.Z) + offsetY * Math.Cos(resultcp.Z)), 0);
-            HOperatorSet.ClearShapeModel(hModelID); //Free the memory of a shape model.
+            
             searchingImage.Dispose();
             return true;
         }
@@ -335,6 +351,24 @@ namespace CVAiO.Bplus.HByUser
         }
     }
 
+
+    public enum EMultiMarkMode
+    {
+        None,
+        FirstMark,
+        BestMark,
+    }
+
+    public enum EOptimize
+    {
+        sort,
+        none
+    }
+    public enum EGrayValues
+    {
+        normalized,
+        original,
+    }
 
     [TypeConverterAttribute(typeof(ExpandableObjectConverter))]
     [Serializable]
@@ -354,8 +388,8 @@ namespace CVAiO.Bplus.HByUser
         private InteractRectangle searchRegion;
         private InteractRectangle trainRegion;
         private InteractCoordinate origin;
-        private int contrast;
-        private int minContrast;
+        private EOptimize optimize;
+        private EGrayValues grayValues;
 
         #endregion
 
@@ -422,38 +456,40 @@ namespace CVAiO.Bplus.HByUser
         }
 
         [Description("Start Searching Angle"), PropertyOrder(37)]
-        public int AngleNeg { get => angleNeg; set { if (angleNeg == value || value > anglePos) return; angleNeg = value; NotifyPropertyChanged(nameof(AngleNeg)); } }
+        public int AngleNeg { get => angleNeg; set { if (angleNeg == value || value > anglePos) return; angleNeg = value; NotifyPropertyChanged(nameof(AngleNeg)); clearModelID(); } }
 
         [Description("End Searching Angle"), PropertyOrder(38)]
-        public int AnglePos { get => anglePos; set { if (anglePos == value || value < angleNeg) return; anglePos = value; NotifyPropertyChanged(nameof(AnglePos)); } }
+        public int AnglePos { get => anglePos; set { if (anglePos == value || value < angleNeg) return; anglePos = value; NotifyPropertyChanged(nameof(AnglePos)); clearModelID(); } }
 
         [Description("Minimum Searching Angle (deg)"), PropertyOrder(39)]
-        public double MinStep { get => minStep; set { if (minStep == value || value <= 0) return; minStep = value; NotifyPropertyChanged(nameof(MinStep)); } }
+        public double MinStep { get => minStep; set { if (minStep == value || value <= 0) return; minStep = value; NotifyPropertyChanged(nameof(MinStep)); clearModelID(); } }
 
         [Description("Using SubPixel Accuracy"), PropertyOrder(40), Browsable(false)]
         public bool SubPixel { get => subPixel; set { if (subPixel == value) return; subPixel = value; NotifyPropertyChanged(nameof(SubPixel)); } }
        
-        [Description("Threshold or hysteresis thresholds for the contrast of the object in the template image and optionally minimum size of the object parts"), PropertyOrder(41)]
-        public int Contrast 
-        { 
-            get => contrast;
-            set
+        [Description("https://www.mvtec.com/doc/halcon/12/en/create_template.html#Optimize"), PropertyOrder(41)]
+        public EOptimize Optimize
+        {
+            get => optimize; 
+            set 
             {
-                if (contrast == value || value < MinContrast || value < 0  || value > 150) return;
-                contrast = value;
-                NotifyPropertyChanged(nameof(Contrast));
+                if (optimize == value) return;
+                optimize = value;
+                NotifyPropertyChanged(nameof(Optimize));
+                clearModelID();
             }
         }
 
-        [Description("Minimum contrast of the objects in the search images. MinContrast < Contrast"), PropertyOrder(42)]
-        public int MinContrast 
-        { 
-            get => minContrast;
-            set 
+        [Description("https://www.mvtec.com/doc/halcon/12/en/create_template.html#GrayValues"), PropertyOrder(42)]
+        public EGrayValues GrayValues 
+        {
+            get => grayValues;
+            set
             {
-                if (minContrast == value || value > Contrast || value < 1) return;
-                minContrast = value;
-                NotifyPropertyChanged(nameof(MinContrast));
+                if (grayValues == value) return;
+                grayValues = value;
+                NotifyPropertyChanged(nameof(GrayValues));
+                clearModelID();
             }
         }
 
@@ -464,8 +500,6 @@ namespace CVAiO.Bplus.HByUser
             angleNeg = -20;
             anglePos = 20;
             minStep = 0.1;
-            contrast = 100;
-            minContrast = 1;
             patternDatas.Add(new PatternData());
             patternDatas.Add(new PatternData());
             patternDatas.Add(new PatternData());
@@ -491,6 +525,103 @@ namespace CVAiO.Bplus.HByUser
                 return (HTemplateMatchRunParams)runParams;
             }
         }
+
+        private void clearModelID()
+        {
+            foreach (PatternData patternData in PatternDatas)
+            {
+                if (patternData.ModelID != null) HOperatorSet.ClearTemplate(patternData.ModelID);
+                patternData.ModelID = null;
+            }
+                
+        }
         #endregion
+    }
+
+    [Serializable]
+    public class PatternData : ISerializable, IDisposable
+    {
+        private Image patternImage;
+        private Point3f patternCP;
+        private InteractMask mask;
+        private Mat maskedPattern;
+        private double borderColor;
+
+        [NonSerialized]
+        public HTuple ModelID;
+
+        public Image PatternImage { get => patternImage; set => patternImage = value; }
+        public Point3f PatternCP { get => patternCP; set => patternCP = value; }
+        public InteractMask Mask { get => mask; set => mask = value; }
+        public Mat MaskedPattern { get => maskedPattern; set => maskedPattern = value; }
+        public double BorderColor { get => borderColor; set => borderColor = value; }
+
+        public HImage HImage { get => new HImage("byte", PatternImage.Width, PatternImage.Height, PatternImage.Mat.Data); set => throw new Exception("can not set HImage"); }
+
+        public PatternData()
+        { }
+
+        public PatternData(Image pattern, Point3f center, InteractMask mask = null)
+        {
+            if (pattern == null)
+                return;
+            Image temp = new Image(new Mat(pattern.Mat.Size(), MatType.CV_8UC1));
+            if (pattern.Mat.Type() == MatType.CV_8UC3)
+                CVAiO2.CvtColor(pattern.Mat, temp.Mat, ColorConversionCodes.RGB2GRAY);
+            else if (pattern.Mat.Type() == MatType.CV_8UC1)
+                temp = pattern.Clone(true);
+            else
+                return;
+
+            if (patternImage != null)
+                patternImage.Dispose();
+            patternImage = pattern.Clone(true);
+            patternCP = center;
+            maskedPattern = patternImage.Mat.Clone();
+            borderColor = ((double)patternImage.Mat.Mean() + 255 / 2) % 255;
+            if (mask == null || mask.MaskMat.Width != PatternImage.Width || mask.MaskMat.Height != PatternImage.Height)
+                this.mask = new InteractMask(pattern.Width, pattern.Height);
+            else
+                this.mask = mask.Clone();
+        }
+
+        public PatternData(SerializationInfo info, StreamingContext context)
+        {
+            Serializer.Deserializing(this, info, context);
+        }
+
+        [System.Security.Permissions.SecurityPermission(System.Security.Permissions.SecurityAction.Demand, SerializationFormatter = true)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            Serializer.Serializing(this, info, context);
+        }
+
+        public void MakeMaskedPattern()
+        {
+            if (PatternImage.Mat != null && Mask.MaskMat != null)
+            {
+                if (MaskedPattern != null)
+                    MaskedPattern.Dispose();
+                MaskedPattern = new Mat();
+                PatternImage.Mat.CopyTo(MaskedPattern, Mask.MaskMat);
+                double mean = (double)MaskedPattern.Mean(Mask.MaskMat);
+                CVAiO2.ScaleAdd(new Scalar(255) - Mask.MaskMat, mean / 255.0, MaskedPattern, MaskedPattern);
+            }
+        }
+        public void ResetMaskedPattern()
+        {
+            if (patternImage.Mat != null && Mask.MaskMat != null)
+            {
+                if (maskedPattern != null)
+                    maskedPattern.Dispose();
+                maskedPattern = patternImage.Mat.Clone();
+            }
+        }
+
+        public void Dispose()
+        {
+            if (patternImage != null) patternImage.Dispose();
+            if (mask != null) mask.Dispose();
+        }
     }
 }

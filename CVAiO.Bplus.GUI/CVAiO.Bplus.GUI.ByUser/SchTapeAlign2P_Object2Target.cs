@@ -57,8 +57,7 @@ namespace CVAiO.Bplus.GUI.ByUser
             // Run Process scheduler (Image Processing)
             try
             {
-                ProcessScheduler.Run();
-                return true;
+                return ProcessScheduler.Run();
             }
             catch (Exception ex)
             {

@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using CVAiO.Bplus.Core;
 using CVAiO.Bplus.HByUser;
 using CVAiO.Bplus.OpenCV;
-using CVAiO.Bplus.TemplateMatch;
 
 namespace CVAiO.Bplus.HByUser.Controls
 {
