@@ -99,6 +99,7 @@
     <Reference Include="CVAiO.Bplus.OpenCV">
       <HintPath>..\..\Debug\CVAiO.Bplus.OpenCV.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -122,6 +123,12 @@
     </Compile>
     <Compile Include="CogPMAlignEdit.Designer.cs">
       <DependentUpon>CogPMAlignEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CogTemplateMatchEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CogTemplateMatchEdit.Designer.cs">
+      <DependentUpon>CogTemplateMatchEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="CogToolEdit.cs">
       <SubType>Form</SubType>

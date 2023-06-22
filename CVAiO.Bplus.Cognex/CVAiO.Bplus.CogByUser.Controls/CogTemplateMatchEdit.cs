@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -8,20 +6,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CVAiO.Bplus.Core;
-using CVAiO.Bplus.HByUser;
+using CVAiO.Bplus.CogByUser;
 using CVAiO.Bplus.OpenCV;
-using CVAiO.Bplus.TemplateMatch;
-using CVAiO.Bplus.Halcon;
+using System;
+using Cognex.VisionPro.PMAlign;
+using Cognex.VisionPro;
+using System.Collections.Generic;
 
-namespace CVAiO.Bplus.HByUser.Controls
+namespace CVAiO.Bplus.CogByUser.Controls
 {
-    public partial class HTemplateMatchEdit : ToolEditBase
+    public partial class CogTemplateMatchEdit : ToolEditBase
     {
         #region Fields
         private BindingSource source;
         private int selectedPatternIndex = -1;
         #endregion
-        public HTemplateMatchEdit()
+        public CogTemplateMatchEdit()
         {
             InitializeComponent();
             InitBinding();
@@ -57,15 +57,15 @@ namespace CVAiO.Bplus.HByUser.Controls
         {
             source.DataSource = Subject;
             source.ResetBindings(true);
-            ToolProperty.SelectedObject = Subject as HTemplateMatch;
+            ToolProperty.SelectedObject = Subject as CogTemplateMatch;
             splitPropertyControl.IsSplitterFixed = true;
             splitPropertyControl.FixedPanel = FixedPanel.Panel2;
             btnMain_Click(this, null);
         }
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public HTemplateMatch Subject
+        public CogTemplateMatch Subject
         {
-            get { return base.GetSubject() as HTemplateMatch; }
+            get { return base.GetSubject() as CogTemplateMatch; }
             set { base.SetSubject(value); }
         }
 
@@ -76,14 +76,15 @@ namespace CVAiO.Bplus.HByUser.Controls
             {
                 if (selectedPatternIndex == value) return;
                 selectedPatternIndex = value;
-                displayPattern.Image = Subject.RunParams.PatternDatas[selectedPatternIndex].PatternImage;
+                if (!Subject.RunParams.PatternDatas[selectedPatternIndex].Trained) return;
+                displayPattern.Image = new Core.Image(Subject.RunParams.PatternDatas[selectedPatternIndex].GetTrainedPatternImage().ToBitmap().ToMat());
                 displayPattern.FitToWindow();
             }
         }
 
         private void InitBinding()
         {
-            source = new BindingSource(typeof(HTemplateMatch), null);
+            source = new BindingSource(typeof(CogTemplateMatch), null);
             this.DataBindings.Add("SelectedPatternIndex", source, "SelectedPatternIndex", true, DataSourceUpdateMode.OnPropertyChanged);
         }
 
@@ -95,7 +96,7 @@ namespace CVAiO.Bplus.HByUser.Controls
             fd.Multiselect = true;
             if (fd.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
             if (string.IsNullOrEmpty(fd.FileName)) return;
-            Subject.RunParams.PatternDatas = (List<PatternData>)(new Serializer().Deserializing(fd.FileName));
+            Subject.RunParams.PatternDatas = (List<CogPMAlignPattern>)(new Serializer().Deserializing(fd.FileName));
             LogWriter.Instance.LogTool(string.Format("Pattern Load: {0}", fd.FileName));
         }
 
@@ -114,7 +115,7 @@ namespace CVAiO.Bplus.HByUser.Controls
         private void btnPatternRemove_Click(object sender, EventArgs e)
         {
             if (frmMessageBox.Show(EMessageIcon.Question, string.Format("Do you really want to remove {0} Mark ?", Subject.SelectedPatternIndex)) != DialogResult.Yes) return;
-            Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex] = new PatternData();
+            Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex] = new CogPMAlignPattern();
             RefreshPattern();
         }
 
@@ -132,42 +133,36 @@ namespace CVAiO.Bplus.HByUser.Controls
                 frmMessageBox.Show(EMessageIcon.Error, "There is no Image in ROI");
                 return;
             }
-            if (Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex] != null)
+            CogPMAlignPattern cogPMAlignPattern = new CogPMAlignPattern()
             {
-                try
+                TrainAlgorithm = CogPMAlignTrainAlgorithmConstants.PatMax,
+                TrainMode = CogPMAlignTrainModeConstants.Image,
+                TrainImage = new CogImage8Grey(image.Mat.ToBitmap()),
+                IgnorePolarity = false,
+                Origin = new CogTransform2DLinear()
                 {
-                    Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex].ShapeModel.ClearShapeModel();
-                    Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex].ShapeModel = null;
-                    Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex].NccModel.ClearNccModel();
-                    Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex].NccModel = null;
-                    GC.Collect();
+                    TranslationX = Subject.RunParams.Origin.X,
+                    TranslationY = Subject.RunParams.Origin.Y,
+                    Rotation = 0,
+                    Scaling = 1
+                },
+                TrainRegion = new CogRectangle()
+                {
+                    X = Subject.RunParams.TrainRegion.X,
+                    Y = Subject.RunParams.TrainRegion.Y,
+                    Width = Subject.RunParams.TrainRegion.Width,
+                    Height = Subject.RunParams.TrainRegion.Height
                 }
-                catch { }
-            }
-            Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex] = new PatternData(new Core.Image(templateImg), new Point3f(Subject.RunParams.TrainRegion.Center.X, Subject.RunParams.TrainRegion.Center.Y, 0));
 
-            double adaptiveScale = 1;
-            // Giới hạn kích thước mark để đảm bảo tốc độ xử lý
-            if (templateImg.Width > 300 || templateImg.Height > 300)
-                adaptiveScale = Math.Max((double)templateImg.Width / 300, (double)templateImg.Height / 300);
-            Mat templateScale = new Mat();
-            CVAiO2.Resize(templateImg, templateScale, AiO.ResizeSize(templateImg.Size(), 1 / adaptiveScale), 0, 0, InterpolationFlags.Linear);
-            HImage hTemplateImage = new HImage("byte", templateScale.Width, templateScale.Height, templateScale.Data);
-            if (Subject.RunParams.MatchMode == EMatchMode.Shape_Based)
-            {
-                HTuple angleStep = "auto";
-                Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex].ShapeModel = new HShapeModel(hTemplateImage, (HTuple)3, Subject.RunParams.AngleNeg * Math.PI / 180, (Subject.RunParams.AnglePos - Subject.RunParams.AngleNeg) * Math.PI / 180, angleStep, (HTuple)"auto", "use_polarity", (HTuple)"auto_contrast", (HTuple)"auto");
-            }
-            else
-            {
-                Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex].NccModel = new HNCCModel(hTemplateImage, (HTuple)4, Subject.RunParams.AngleNeg * Math.PI / 180, (Subject.RunParams.AnglePos - Subject.RunParams.AngleNeg) * Math.PI / 180, (HTuple)(0.1 * Math.PI / 180), "use_polarity");
-            }
+            };
+            cogPMAlignPattern.Train();
+            Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex] = cogPMAlignPattern;
             RefreshPattern();
         }
 
         private void btnPatternMask_Click(object sender, EventArgs e)
         {
-            if (Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex].PatternImage == null) return;
+            //if (Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex].PatternImage == null) return;
         }
 
         private void btnMain_Click(object sender, EventArgs e)
@@ -201,8 +196,27 @@ namespace CVAiO.Bplus.HByUser.Controls
         }
         private void RefreshPattern()
         {
-            displayPattern.Image = Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex].PatternImage;
+            displayPattern.Image = null;
+            if (!Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex].Trained) return;
+            displayPattern.Image = new Core.Image(Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex].GetTrainedPatternImage().ToBitmap().ToMat());
             displayPattern.FitToWindow();
+        }
+
+        private void btnCogTool_Click(object sender, EventArgs e)
+        {
+            CogToolEdit cogToolEdit = new CogToolEdit(new CogPMAlignEditV2());
+            Subject.RunParams.CogPMAlignTool.InputImage = new CogImage8Grey(Subject.InImage.Mat.ToBitmap());
+            Subject.RunParams.CogPMAlignTool.Pattern = Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex];
+            Subject.RunParams.CogPMAlignTool.SearchRegion = new CogRectangle()
+            {
+                X = Subject.RunParams.SearchRegion.X,
+                Y = Subject.RunParams.SearchRegion.Y,
+                Width = Subject.RunParams.SearchRegion.Width,
+                Height = Subject.RunParams.SearchRegion.Height
+            };
+            (cogToolEdit.toolEditBase as CogPMAlignEditV2).Subject = Subject.RunParams.CogPMAlignTool;
+            cogToolEdit.ShowDialog();
+            ToolProperty.Refresh();
         }
     }
 }

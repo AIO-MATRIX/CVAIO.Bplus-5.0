@@ -16,7 +16,7 @@ namespace CVAiO.Bplus
         {
             InitializeComponent();
             processCreatorUI1.HalconMVTec = true;
-            processCreatorUI1.CognexVisionPro = false;
+            processCreatorUI1.CognexVisionPro = true;
         }
     }
 }

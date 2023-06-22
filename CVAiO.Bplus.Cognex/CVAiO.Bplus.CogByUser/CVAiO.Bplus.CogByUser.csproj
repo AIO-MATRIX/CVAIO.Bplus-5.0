@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="CogFindLine.cs" />
     <Compile Include="CogPMAlign.cs" />
+    <Compile Include="CogTemplateMatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

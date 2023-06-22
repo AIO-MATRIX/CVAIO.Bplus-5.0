@@ -61,10 +61,6 @@
       <Private>False</Private>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="CVAiO.Bplus.TemplateMatch, Version=5.0.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Debug\CVAiO.Bplus.TemplateMatch.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -77,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
     <Compile Include="HTemplateMatch.cs" />
     <Compile Include="HDataCode2D.cs" />
     <Compile Include="HOCRCnn.cs" />
