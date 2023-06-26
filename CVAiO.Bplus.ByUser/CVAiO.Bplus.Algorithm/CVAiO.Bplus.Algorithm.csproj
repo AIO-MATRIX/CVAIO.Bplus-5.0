@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlgoOcrInspect.cs" />
     <Compile Include="AlgoTapeAlign2P_Object2Target.cs" />
     <Compile Include="AlgoObjectAlign2P.cs" />
     <Compile Include="AlgoObjectAlign1P.cs" />

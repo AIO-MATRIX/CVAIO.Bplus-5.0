@@ -78,7 +78,7 @@ namespace CVAiO.Bplus.HByUser
         [Category("4. Output"), PropertyOrder(13), Browsable(false)]
         public List<Point2f> ListPosition { get => listPosition; set => listPosition = value; }
 
-        [Category("4. Output"), PropertyOrder(14) , ReadOnly(true)]
+        [OutputParam, Category("4. Output"), PropertyOrder(14) , ReadOnly(true)]
         public string DataOCR { get => dataOCR; set => dataOCR = value; }
 
         #endregion
@@ -106,6 +106,7 @@ namespace CVAiO.Bplus.HByUser
         public override void InitOutParams()
         {
             outParams.Add("OutImage", null);
+            outParams.Add("DataOCR", null); 
         }
         public override void InitImageList()
         {

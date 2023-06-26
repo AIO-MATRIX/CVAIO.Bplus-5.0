@@ -137,18 +137,25 @@ namespace CVAiO.Bplus.Simulator
         private void btnReady_Click(object sender, EventArgs e)
         {
             if (!isStart) return;
-            InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutReady, true);
+            if (InterfaceCalibration.ComIO.GetOutValue((int)InterfaceCalibration.OutReady))
+                InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutReady, false);
+            else
+                InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutReady, true);
         }
 
         private void btnStartAck_Click(object sender, EventArgs e)
         {
             if (!isStart) return;
-            InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutStartAck, true);
+            if (InterfaceCalibration.ComIO.GetOutValue((int)InterfaceCalibration.OutStartAck))
+                InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutStartAck, false);
+            else
+                InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutStartAck, true);
         }
 
         private void btnMoveAck_Click(object sender, EventArgs e)
         {
             if (!isStart) return;
+
             InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutMoveAck, true);
             InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutDone, false);
 
@@ -164,9 +171,12 @@ namespace CVAiO.Bplus.Simulator
         private void btnEndAck_Click(object sender, EventArgs e)
         {
             if (!isStart) return;
-            InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutEndAck, true);
             InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutMoveAck, false);
             InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutDone, false);
+            if (InterfaceCalibration.ComIO.GetOutValue((int)InterfaceCalibration.OutEndAck))
+                InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutEndAck, false);
+            else
+                InterfaceCalibration.ComIO.SetOutValue((int)InterfaceCalibration.OutEndAck, true);
         }
 
         private void frmCalibrationSimulator_FormClosing(object sender, FormClosingEventArgs e)

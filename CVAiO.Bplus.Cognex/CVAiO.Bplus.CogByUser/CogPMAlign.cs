@@ -212,6 +212,7 @@ namespace CVAiO.Bplus.CogByUser
             RunStatus = new RunStatus(EToolResult.Waiting, "Tool has not run yet. Please Run Tool first. ");
             if (OutImage != null) OutImage.Dispose();
             OutImage = null;
+            matchingResult = null;
             GetOutParams();
         }
         #endregion

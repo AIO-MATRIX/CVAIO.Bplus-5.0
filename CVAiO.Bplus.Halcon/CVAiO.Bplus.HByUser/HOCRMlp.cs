@@ -106,6 +106,7 @@ namespace CVAiO.Bplus.HByUser
         public override void InitOutParams()
         {
             outParams.Add("OutImage", null);
+            outParams.Add("DataOCR", null);
         }
         public override void InitImageList()
         {

@@ -165,7 +165,25 @@ namespace CVAiO.Bplus.Algorithm
             {
                 DrawInfos(display, ObjLine, calibMatrix1, System.Drawing.Color.AliceBlue, font);
                 DrawCoordinate(display, ObjOrigin, calibMatrix1, font);
-            }   
+            }
+            System.Drawing.SolidBrush SB = new System.Drawing.SolidBrush(System.Drawing.Color.Blue);
+            if (ObjPoint1 != null)
+            {
+                string tmp = string.Format("ObjPoint1 : ({0:F3}, {1:F3}) T : {2:F3}deg ", ObjPoint1.X, ObjPoint1.Y, ObjPoint1.ThetaRad * 180f / Math.PI);
+                display.DrawString(tmp, font, SB, new System.Drawing.PointF(0, 15));
+                display.DrawCross(System.Drawing.Pens.Green, new Point2d(ObjPoint1.X, ObjPoint1.Y), 100, 100, ObjPoint1.ThetaRad);
+            }
+            if (TarPoint1 != null)
+            {
+                string tmp = string.Format("TarPoint1 : ({0:F3}, {1:F3}) T : {2:F3}deg ", TarPoint1.X, TarPoint1.Y, TarPoint1.ThetaRad * 180f / Math.PI);
+                display.DrawString(tmp, font, SB, new System.Drawing.PointF(0, 100));
+                display.DrawCross(System.Drawing.Pens.Green, new Point2d(TarPoint1.X, TarPoint1.Y), 100, 100, TarPoint1.ThetaRad);
+            }
+            if (RunStatus.ToolResult != EToolResult.Accept)
+            {
+                string tmp = string.Format("RunStatus : {0}, {1} ", RunStatus.ToolResult, RunStatus.Message);
+                display.DrawString(tmp, font, SB, new System.Drawing.PointF(0, 200));
+            }
         }
         public void DrawInputs2(DisplayView display)
         {
@@ -182,6 +200,24 @@ namespace CVAiO.Bplus.Algorithm
             {
                 DrawInfos(display, ObjLine, calibMatrix2, System.Drawing.Color.AliceBlue, font);
                 DrawCoordinate(display, ObjOrigin, calibMatrix2, font);
+            }
+            System.Drawing.SolidBrush SB = new System.Drawing.SolidBrush(System.Drawing.Color.Blue);
+            if (ObjPoint2 != null)
+            {
+                string tmp = string.Format("ObjPoint2 : ({0:F3}, {1:F3}) T : {2:F3}deg ", ObjPoint2.X, ObjPoint2.Y, ObjPoint2.ThetaRad * 180f / Math.PI);
+                display.DrawString(tmp, font, SB, new System.Drawing.PointF(0, 15));
+                display.DrawCross(System.Drawing.Pens.Green, new Point2d(ObjPoint2.X, ObjPoint2.Y), 100, 100, ObjPoint2.ThetaRad);
+            }
+            if (TarPoint2 != null)
+            {
+                string tmp = string.Format("TarPoint2 : ({0:F3}, {1:F3}) T : {2:F3}deg ", TarPoint2.X, TarPoint2.Y, TarPoint2.ThetaRad * 180f / Math.PI);
+                display.DrawString(tmp, font, SB, new System.Drawing.PointF(0, 100));
+                display.DrawCross(System.Drawing.Pens.Green, new Point2d(TarPoint2.X, TarPoint2.Y), 100, 100, TarPoint2.ThetaRad);
+            }
+            if (RunStatus.ToolResult != EToolResult.Accept)
+            {
+                string tmp = string.Format("RunStatus : {0}, {1} ", RunStatus.ToolResult, RunStatus.Message);
+                display.DrawString(tmp, font, SB, new System.Drawing.PointF(0, 200));
             }    
         }
 

@@ -25,7 +25,7 @@ namespace CVAiO.Bplus.CogByUser.Controls
         {
             InitializeComponent();
             InitBinding();
-            this.DisplayViewEdit.InsertCustomImage(1, new ImageInfo("[HTemplateMatch] TrainImage"));
+            this.DisplayViewEdit.InsertCustomImage(1, new ImageInfo("[CogTemplateMatch] TrainImage"));
             this.SubjectChanged += TemplateMatchEdit_SubjectChanged;
             this.DisplayViewEdit.SelectedImageChanged += DisplayViewEdit_SelectedImageChanged;
             this.DisplayViewEdit.DisplayViewInteract.DrawObjectChanged += DisplayViewInteract_DrawObjectChanged;
@@ -135,7 +135,7 @@ namespace CVAiO.Bplus.CogByUser.Controls
             }
             CogPMAlignPattern cogPMAlignPattern = new CogPMAlignPattern()
             {
-                TrainAlgorithm = CogPMAlignTrainAlgorithmConstants.PatMax,
+                TrainAlgorithm = CogPMAlignTrainAlgorithmConstants.PatMaxHighSensitivity,
                 TrainMode = CogPMAlignTrainModeConstants.Image,
                 TrainImage = new CogImage8Grey(image.Mat.ToBitmap()),
                 IgnorePolarity = false,
@@ -205,7 +205,8 @@ namespace CVAiO.Bplus.CogByUser.Controls
         private void btnCogTool_Click(object sender, EventArgs e)
         {
             CogToolEdit cogToolEdit = new CogToolEdit(new CogPMAlignEditV2());
-            Subject.RunParams.CogPMAlignTool.InputImage = new CogImage8Grey(Subject.InImage.Mat.ToBitmap());
+            if (Subject.InImage != null)
+                Subject.RunParams.CogPMAlignTool.InputImage = new CogImage8Grey(Subject.InImage.Mat.ToBitmap());
             Subject.RunParams.CogPMAlignTool.Pattern = Subject.RunParams.PatternDatas[Subject.SelectedPatternIndex];
             Subject.RunParams.CogPMAlignTool.SearchRegion = new CogRectangle()
             {

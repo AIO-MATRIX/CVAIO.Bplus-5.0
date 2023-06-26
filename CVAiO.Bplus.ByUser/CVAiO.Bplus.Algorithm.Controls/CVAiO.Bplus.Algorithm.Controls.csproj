@@ -70,6 +70,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlgoOcrInspectEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AlgoOcrInspectEdit.Designer.cs">
+      <DependentUpon>AlgoOcrInspectEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="AlgoTapeAlign2P_Object2TargetEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -103,6 +109,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AlgoOcrInspectEdit.resx">
+      <DependentUpon>AlgoOcrInspectEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AlgoTapeAlign2P_Object2TargetEdit.resx">
       <DependentUpon>AlgoTapeAlign2P_Object2TargetEdit.cs</DependentUpon>
     </EmbeddedResource>

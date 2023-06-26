@@ -30,23 +30,23 @@ namespace CVAiO.Bplus.Simulator
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSimulator));
-            this.processSimulator1 = new CVAiO.Bplus.Simulator.ProcessSimulator();
+            this.calibration1 = new CVAiO.Bplus.Simulator.Calibration();
             this.SuspendLayout();
             // 
-            // processSimulator1
+            // calibration1
             // 
-            this.processSimulator1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.processSimulator1.Location = new System.Drawing.Point(0, 0);
-            this.processSimulator1.Name = "processSimulator1";
-            this.processSimulator1.Size = new System.Drawing.Size(1099, 532);
-            this.processSimulator1.TabIndex = 0;
+            this.calibration1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.calibration1.Location = new System.Drawing.Point(0, 0);
+            this.calibration1.Name = "calibration1";
+            this.calibration1.Size = new System.Drawing.Size(1099, 532);
+            this.calibration1.TabIndex = 0;
             // 
             // frmSimulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1099, 532);
-            this.Controls.Add(this.processSimulator1);
+            this.Controls.Add(this.calibration1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmSimulator";
             this.Text = "CVAIO B+ Simulator";
@@ -56,6 +56,6 @@ namespace CVAiO.Bplus.Simulator
 
         #endregion
 
-        private ProcessSimulator processSimulator1;
+        private Calibration calibration1;
     }
 }

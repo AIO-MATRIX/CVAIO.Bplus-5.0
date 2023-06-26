@@ -492,7 +492,7 @@ namespace CVAiO.Bplus.CogByUser
                     cogPMAlignTool.RunParams.ZoneScale.Low = scaleLow;
                     cogPMAlignTool.RunParams.ZoneScale.High = scaleHigh;
                     cogPMAlignTool.RunParams.SearchRegionMode = CogRegionModeConstants.PixelAlignedBoundingBox;
-                    cogPMAlignTool.RunParams.RunAlgorithm = CogPMAlignRunAlgorithmConstants.PatMax;
+                    cogPMAlignTool.RunParams.RunAlgorithm = CogPMAlignRunAlgorithmConstants.BestTrained;
                     cogPMAlignTool.RunParams.RunMode = CogPMAlignRunModeConstants.SearchImage;
                     cogPMAlignTool.RunParams.ApproximateNumberToFind = 1;
                     cogPMAlignTool.RunParams.TimeoutEnabled = true;
