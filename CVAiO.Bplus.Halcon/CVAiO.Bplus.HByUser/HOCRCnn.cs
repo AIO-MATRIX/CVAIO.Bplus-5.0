@@ -17,6 +17,8 @@ using System.Windows.Forms.Design;
 namespace CVAiO.Bplus.HByUser
 {
     // https://www.mvtec.com/doc/halcon/13/en/toc_ocr_convolutionalneuralnets.html
+    // CNN có độ chính xác cao hơn Mlp nhưng tack time cao hơn
+    // Nên sử dụng CNN
     [Serializable]
     public class HOCRCnn : ToolBase
     {
@@ -126,19 +128,22 @@ namespace CVAiO.Bplus.HByUser
             Random rnd = new Random();
             foreach (ConnectedComponents.Blob blob in Blobs)
             {
+                if (blob.Left < RunParams.SearchRegion.X || blob.Left + blob.Width > RunParams.SearchRegion.X + RunParams.SearchRegion.Width ||
+                blob.Top < RunParams.SearchRegion.Y || blob.Top + blob.Height > RunParams.SearchRegion.Y + RunParams.SearchRegion.Height) continue;
                 Rectf rectF = new Rectf(blob.Left, blob.Top, blob.Width, blob.Height);
                 display.DrawRectangle(new System.Drawing.Pen(System.Drawing.Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256)), 1), rectF);
-            }
+             }
         }
 
         public void DrawOutputs(DisplayView display)
         {
             if (!AiO.IsPossibleImage(OutImage) || listChar.Count == 0 || listPosition.Count != listChar.Count ) return;
             System.Drawing.Font f = new System.Drawing.Font("굴림체", 15, System.Drawing.FontStyle.Bold);
+            int minY = (int)listPosition.Min(x => x.Y);
             System.Drawing.SolidBrush SB = new System.Drawing.SolidBrush(System.Drawing.Color.Blue);
             for (int i = 0; i < listChar.Count; i++)
             {
-                display.DrawString(listChar[i].ToString(), f, SB, new Point2d(listPosition[i].X, listPosition[i].Y));
+                display.DrawString(listChar[i].ToString(), f, SB, new Point2d(listPosition[i].X, minY - 15));
             }
         }
 
@@ -163,25 +168,100 @@ namespace CVAiO.Bplus.HByUser
             {
                 if (!AiO.IsPossibleImage(InImage)) throw new Exception("InputImage = Null");
                 if (OutImage != null) OutImage.Dispose();
-                if (RunParams.OcrHandle == null) throw new Exception("OcrHandle = Null"); 
+                if (RunParams.WordParsed.Contains('U') && RunParams.OcrHandleUpper == null) throw new Exception("OcrHandleUpper = Null");
+                if (RunParams.WordParsed.Contains('L') && RunParams.OcrHandleLower == null) throw new Exception("OcrHandleLower = Null");
+                if (RunParams.WordParsed.Contains('N') && RunParams.OcrHandleNumber == null) throw new Exception("OcrHandleNumber = Null");
                 OutImage = InImage.Clone(true);
                 outputImageInfo.Image = OutImage;
                 dataOCR = "";
-                HImage hImage = new HImage("byte", InImage.Width, InImage.Height, InImage.Mat.Data);
+                HImage hImage = new HImage("byte", OutImage.Mat.Width, OutImage.Mat.Height, OutImage.Mat.Data);
+                Blobs.OrderBy(x => x.Left);
                 listChar.Clear();
                 listPosition.Clear();
-                foreach (ConnectedComponents.Blob blob in Blobs)
+                List<ConnectedComponents.Blob> filteredBlobs = Blobs.FindAll(x =>
+                                    x.Left > RunParams.SearchRegion.X && x.Left + x.Width < RunParams.SearchRegion.X + RunParams.SearchRegion.Width
+                                    && x.Top > RunParams.SearchRegion.Y && x.Top + x.Height < RunParams.SearchRegion.Y + RunParams.SearchRegion.Height);
+                if (filteredBlobs.Count == 0) throw new Exception("No Region found");
+                int countChar = 0;
+                int maxHeight = filteredBlobs.Max(x => x.Height);
+                int avarageBottom = (int)filteredBlobs.Average(x => (x.Top + x.Height));
+                foreach (ConnectedComponents.Blob blob in filteredBlobs)
                 {
-                    HRegion character = new HRegion((double)blob.Top - 2, blob.Left - 2, (double)blob.Top + (double)blob.Height + 2, blob.Left + blob.Width + 2);
-                    HTuple classVal, confidence;
-                    Halcon.HOperatorSet.DoOcrSingleClassCnn(character, hImage, RunParams.OcrHandle, 1, out classVal, out confidence);
-                    //The result "\x1A" in classVal signifies that the region has been classified as rejection class.
-                    if (!string.IsNullOrEmpty(classVal.S) && confidence.D > RunParams.ConfidenceLimit)
+                    if (blob.Top + blob.Height < (int)(avarageBottom - 0.3 * maxHeight)) continue;
+                    int characterTop = blob.Top;
+                    int characterBottom = blob.Top + blob.Height;
+                    int characterLeft = blob.Left;
+                    int characterRight = blob.Left + blob.Width;
+                    int offset = maxHeight - blob.Height;
+                    
+                    Mat findRegion = OutImage.Mat.SubMat(characterTop - offset, characterBottom , blob.Left, blob.Left + blob.Width);
+                    int foundUpper = offset;
+                    for (int i = 0; i < offset; i++)
                     {
-                        dataOCR += classVal.S;
-                        listChar.Add(classVal.S[0]);
-                        listPosition.Add(new Point2f(blob.Left, blob.Top));
-                    }    
+                        bool stopSearching = false;
+                        for (int j = 0; j < findRegion.Width; j++)
+                            if (findRegion.At<byte>(i, j) < 75) { stopSearching = true; break; }
+                        if (stopSearching) { foundUpper = i; break; }
+                    }
+                    findRegion.Dispose();
+                    characterTop -= (offset - foundUpper);
+
+                    Mat character = OutImage.Mat.SubMat(characterTop - 1, characterBottom + 1, characterLeft - 1, characterRight + 1);
+                    HRegion hRegion = new HRegion((HTuple)(characterTop - 1), (HTuple)(characterLeft - 1), (HTuple)(characterBottom + 1), (HTuple)(characterRight + 1));
+                    HTuple classVal, confidence;
+                    char foundChar;
+                    //The result "\x1A" in classVal signifies that the region has been classified as rejection class.
+                    
+                    //AiO.ShowImage(character, 1);
+                    if (RunParams.WordParsed[countChar] == 'U')
+                    {
+                        HOperatorSet.DoOcrMultiClassCnn(hRegion, hImage, RunParams.OcrHandleUpper, out classVal, out confidence);
+                        if (string.IsNullOrEmpty(classVal.S) || classVal.S.ToLower().Contains("1a") || confidence.D < RunParams.ConfidenceLimit) 
+                            throw new Exception(string.Format("Char type: U; Confidence: {0}; Limit {1}", confidence.D, RunParams.ConfidenceLimit));
+                        // Special case: I (l)
+                        if (classVal.S[0] == 'l')
+                            foundChar = 'I';
+                        else if (classVal.S[0] == '5')
+                            foundChar = 'S';
+                        else if (classVal.S[0] == '0')
+                            foundChar = 'O';
+                        else
+                            foundChar = classVal.S.ToUpper()[0];
+                        if ((int)(foundChar) < 65 || (int)(foundChar) > 90) 
+                            throw new Exception(string.Format("Char type: U; Found char: {0}; Confidence: {1}; Limit {2}", foundChar, confidence.D, RunParams.ConfidenceLimit));
+                    }  
+                    else if (RunParams.WordParsed[countChar] == 'L')
+                    {
+                        HOperatorSet.DoOcrMultiClassCnn(hRegion, hImage, RunParams.OcrHandleLower, out classVal, out confidence);
+                        if (string.IsNullOrEmpty(classVal.S) || classVal.S.ToLower().Contains("1a") || confidence.D < RunParams.ConfidenceLimit)
+                            throw new Exception(string.Format("Char type: L; Confidence: {0}; Limit {1}", confidence.D, RunParams.ConfidenceLimit));
+                        if (classVal.S[0] == 'I')
+                            foundChar = 'l';
+                        else if (classVal.S[0] == '9')
+                            foundChar = 'g';
+                        else if (classVal.S[0] == '5')
+                            foundChar = 's';
+                        else if (classVal.S[0] == '0')
+                            foundChar = 'o';
+                        else
+                            foundChar = classVal.S.ToLower()[0];
+                        if ((int)(foundChar) < 97 || (int)(foundChar) > 122)
+                            throw new Exception(string.Format("Char type: U; Found char: {0}; Confidence: {1}; Limit {2}", foundChar, confidence.D, RunParams.ConfidenceLimit));
+                    }
+                    else if (RunParams.WordParsed[countChar] == 'N')
+                    {
+                        HOperatorSet.DoOcrMultiClassCnn(hRegion, hImage, RunParams.OcrHandleNumber, out classVal, out confidence);
+                        if (string.IsNullOrEmpty(classVal.S) || classVal.S.ToLower().Contains("1a") || confidence.D < RunParams.ConfidenceLimit)
+                            throw new Exception(string.Format("Char type: U; Found char: {0}; Confidence: {1}; Limit {2}", classVal.S[0], confidence.D, RunParams.ConfidenceLimit));
+                        foundChar = classVal.S[0];
+                    }
+                    else
+                        throw new Exception("Could not find character type");
+                    dataOCR += foundChar;
+                    listChar.Add(foundChar);
+                    listPosition.Add(new Point2f(blob.Left, blob.Top));
+                    character.Dispose();
+                    countChar++;
                 }
                 RunStatus = new RunStatus(EToolResult.Accept, "Succcess", DateTime.Now.Subtract(lastProcessTimeStart).TotalMilliseconds, DateTime.Now.Subtract(lastProcessTimeStart).TotalMilliseconds, null);
             }
@@ -205,7 +285,9 @@ namespace CVAiO.Bplus.HByUser
             }
             //Clears the OCR classifier given by OCRHandle that was created and frees all memory required for the classifier.
             //After calling, the classifier can no longer be used. The handle OCRHandle becomes invalid.
-            Halcon.HOperatorSet.ClearOcrClassCnn(RunParams.OcrHandle);
+            HOperatorSet.ClearOcrClassCnn(RunParams.OcrHandleUpper);
+            HOperatorSet.ClearOcrClassCnn(RunParams.OcrHandleLower);
+            HOperatorSet.ClearOcrClassCnn(RunParams.OcrHandleNumber);
         }
     }
 
@@ -214,42 +296,174 @@ namespace CVAiO.Bplus.HByUser
     public class HOCRCnnRunParams : RunParams, ISerializable
     {
         #region Fields
-        private string ocrClassifier;
+        private InteractRectangle searchRegion;
+        private string wordFormat;
+        private string wordParsed;
+        private string ocrClassifierUpper;
+        private string ocrClassifierLower;
+        private string ocrClassifierNumber;
         private double confidenceLimit;
         [NonSerialized]
-        private HTuple ocrHandle;
+        private HTuple ocrHandleUpper;
+        [NonSerialized]
+        private HTuple ocrHandleLower;
+        [NonSerialized]
+        private HTuple ocrHandleNumber;
         #endregion
 
         #region Properties
-        [Description("Ocr Classifier - occ format"), Category("HOCRCnn"), PropertyOrder(30)]
-        [Editor(typeof(OcrClassifierCnnSelectionEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public string OcrClassifier
+        [TypeConverterAttribute(typeof(ExpandableObjectConverter))]
+        [Description("SearchRegion"), PropertyOrder(30)]
+        public InteractRectangle SearchRegion
         {
-            get => ocrClassifier;
+            get
+            {
+                if (searchRegion == null) searchRegion = new InteractRectangle(0, 0, 200, 200);
+                return searchRegion;
+            }
+            set => searchRegion = value;
+        }
+
+        [Description("Word format: Uppercase{count}Lowercase{count}Number{Count}. Example: U{1}L{7}N{2}L{10}N{3}"), PropertyOrder(32)]
+        public string WordFormat
+        {
+            get => wordFormat;
             set
             {
-                if (ocrClassifier == value || value == "") return;
+                if (wordFormat == value) return;
+                string allowedChar = "0123456789{}ULN";
+                string wordParsing = "";
+                try
+                {
+                    if (!value.All(x => allowedChar.Contains(x))) throw new Exception("Wrong Format (Example: U{1}L{7}N{2}L{10}N{3})");
+                    for (int i = 0; i < value.Length; i++)
+                    {
+                        if (value[i] == 'U' || value[i] == 'L' || value[i] == 'N')
+                        {
+                            char foundChar = value[i];
+                            if (value[i + 1] != '{') throw new Exception("Parsing Error: " + value);
+                            string numberString = "";
+                            for (int j = i + 2; j < value.Length; j++)
+                            {
+                                if (value[j] == '}') { i = j; break; }
+                                numberString += value[j];
+                            }
+                            for (int k = 0; k < int.Parse(numberString); k++)
+                                wordParsing += foundChar;
+                        }
+                        else return;
+                    }
+                }
+                catch (Exception ex) { frmMessageBox.Show(EMessageIcon.Error, ex.ToString(), 2500); return; }
+                wordParsed = wordParsing;
+                wordFormat = value;
+
+            }
+        }
+
+        [ReadOnly(true)]
+        public string WordParsed
+        {
+            get => wordParsed;
+            set
+            {
+                wordParsed = value;
+            }
+        }
+        [Description("Ocr Classifier for Uppercase Letter - occ format"), PropertyOrder(35)]
+        [Editor(typeof(OcrClassifierCnnSelectionEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public string OcrClassifierUpper
+        {
+            get => ocrClassifierUpper;
+            set
+            {
+                if (ocrClassifierUpper == value || value == "") return;
                 if (!File.Exists(value)) return;
-                ocrClassifier = value;
-                ocrHandle = null;
-                NotifyPropertyChanged(nameof(OcrClassifier));
+                ocrClassifierUpper = value;
+                if (ocrHandleUpper != null) HOperatorSet.ClearOcrClassCnn(ocrHandleUpper);
+                ocrHandleUpper = null;
+                NotifyPropertyChanged(nameof(OcrClassifierUpper));
             }
         }
 
         [Browsable(false)]
-        public HTuple OcrHandle
+        public HTuple OcrHandleUpper
         {
             get
             {
-                if (ocrHandle == null)
+                if (ocrHandleUpper == null)
                 {
-                    if (string.IsNullOrEmpty(ocrClassifier) || !File.Exists(ocrClassifier)) return null;
-                    ocrHandle = new HTuple();
-                    Halcon.HOperatorSet.ReadOcrClassCnn(ocrClassifier, out ocrHandle);
+                    if (string.IsNullOrEmpty(ocrClassifierUpper) || !File.Exists(ocrClassifierUpper)) return null;
+                    ocrHandleUpper = new HTuple();
+                    HOperatorSet.ReadOcrClassCnn(ocrClassifierUpper, out ocrHandleUpper);
                 }
-                return ocrHandle;
+                return ocrHandleUpper;
             }
-            set => ocrHandle = value;
+            set => ocrHandleUpper = value;
+        }
+
+        [Description("Ocr Classifier for Lowercase Letter - occ format"), PropertyOrder(35)]
+        [Editor(typeof(OcrClassifierCnnSelectionEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public string OcrClassifierLower
+        {
+            get => ocrClassifierLower;
+            set
+            {
+                if (ocrClassifierLower == value || value == "") return;
+                if (!File.Exists(value)) return;
+                ocrClassifierLower = value;
+                if (ocrHandleLower != null) HOperatorSet.ClearOcrClassCnn(ocrHandleLower);
+                ocrHandleLower = null;
+                NotifyPropertyChanged(nameof(OcrClassifierLower));
+            }
+        }
+
+        [Browsable(false)]
+        public HTuple OcrHandleLower
+        {
+            get
+            {
+                if (ocrHandleLower == null)
+                {
+                    if (string.IsNullOrEmpty(ocrClassifierLower) || !File.Exists(ocrClassifierLower)) return null;
+                    ocrHandleLower = new HTuple();
+                    HOperatorSet.ReadOcrClassCnn(ocrClassifierLower, out ocrHandleLower);
+                }
+                return ocrHandleLower;
+            }
+            set => ocrHandleLower = value;
+        }
+
+        [Description("Ocr Classifier for Number Letter - occ format"), PropertyOrder(35)]
+        [Editor(typeof(OcrClassifierCnnSelectionEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public string OcrClassifierNumber
+        {
+            get => ocrClassifierNumber;
+            set
+            {
+                if (ocrClassifierNumber == value || value == "") return;
+                if (!File.Exists(value)) return;
+                ocrClassifierNumber = value;
+                if (ocrHandleNumber != null) HOperatorSet.ClearOcrClassCnn(ocrHandleNumber);
+                ocrHandleNumber = null;
+                NotifyPropertyChanged(nameof(OcrClassifierNumber));
+            }
+        }
+
+        [Browsable(false)]
+        public HTuple OcrHandleNumber
+        {
+            get
+            {
+                if (ocrHandleNumber == null)
+                {
+                    if (string.IsNullOrEmpty(ocrClassifierNumber) || !File.Exists(ocrClassifierNumber)) return null;
+                    ocrHandleNumber = new HTuple();
+                    HOperatorSet.ReadOcrClassCnn(ocrClassifierNumber, out ocrHandleNumber);
+                }
+                return ocrHandleNumber;
+            }
+            set => ocrHandleNumber = value;
         }
 
         [Description("Confidence Limit (0.5~1)"), PropertyOrder(31)]

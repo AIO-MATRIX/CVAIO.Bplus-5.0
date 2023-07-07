@@ -10,11 +10,14 @@ using System.Threading.Tasks;
 
 namespace CVAiO.Bplus.Interface.ByUser
 {
+    [Serializable]
     public class IO_ByUser : Data_ByUser, IComIO, ISerializable
     {
         #region Fields
         [NonSerialized]
-        private Thread mReadThread, mWriteThread;
+        private bool threadFlag = false;
+        [NonSerialized]
+        private Thread mReadThread;
         [NonSerialized]
         private Dictionary<int, bool> inIO = new Dictionary<int, bool>();
         [NonSerialized]
@@ -38,82 +41,44 @@ namespace CVAiO.Bplus.Interface.ByUser
         }
         public void ThreadStart()
         {
-            if (mThreadFlag)
+            if (threadFlag)
             {
                 ThreadStop();
                 Thread.Sleep(100);
             }
-            mThreadFlag = true;
+            threadFlag = true;
             mReadThread = new Thread(new ThreadStart(GetBlockData));
             mReadThread.Start();
-            mWriteThread = new Thread(new ThreadStart(SetBlockData));
-            mWriteThread.Start();
         }
 
         public void ThreadStop()
         {
-            mThreadFlag = false;
-
-            if (mReadThread != null)
-            {
-                mReadThread.Join();
-            }
-            if (mWriteThread != null)
-            {
-                mWriteThread.Join();
-            }
+            threadFlag = false;
         }
         private void GetBlockData()
         {
-            while (mThreadFlag)
+            while (threadFlag)
             {
                 try
                 {
-                    Thread.Sleep(threadsleep);
-                    if (base.byUser == null) continue;
-
+                    Thread.Sleep((int)base.threadSleep);
+                    if (base.socket == null) continue;
                     int[] iii = inIO.Keys.ToArray();
-
                     for (int index = 0; index < inIO.Count; index++)
                     {
-                        int value;
+                        short value;
                         base.ReadValue(iii[index], out value);
                         inIO[iii[index]] = value > 0 ? true : false;
                     }
                 }
                 catch
                 {
-                    LogWriter.Instance.LogError("RS232 IO Get I/F Error");
+                    LogWriter.Instance.LogError("By User IO Get I/F Error");
                     continue;
                 }
             }
         }
-        private void SetBlockData()
-        {
-            while (mThreadFlag)
-            {
-                try
-                {
-                    Thread.Sleep(threadsleep);
-                    if (base.byUser == null) continue;
-                    lock (writeLock)
-                    {
-                        int[] iii = outIO.Keys.ToArray();
 
-                        for (int index = 0; index < outIO.Count; index++)
-                        {
-                            int value = outIO[iii[index]] == true ? 1 : 0;
-                            base.WriteValue(iii[index], value);
-                        }
-                    }
-                }
-                catch
-                {
-                    LogWriter.Instance.LogError("By User IO Set I/F Error");
-                    continue;
-                }
-            }
-        }
         public bool GetInValue(int index)
         {
             if (index < 0) return false;
@@ -136,11 +101,39 @@ namespace CVAiO.Bplus.Interface.ByUser
         public bool SetOutValue(int index, bool value)
         {
             if (index < 0) return false;
+            bool result = false;
             lock (writeLock)
             {
                 outIO[index] = value;
+                result = WriteBlockData(index, value);
             }
-            return IsConnected;
+            return result;
+        }
+        private bool WriteBlockData(int index, bool value)
+        {
+            lock (writeLock)
+            {
+                try
+                {
+                    if (base.socket == null || !base.socket.IsConnected) return false;
+                    lock (writeLock)
+                    {
+                        short valueint = (short)(value ? 1 : 0);
+                        bool result = base.WriteValue(index, valueint);
+                        return result;
+                    }
+                }
+                catch
+                {
+                    LogWriter.Instance.LogError("By User IO Set I/F Error");
+                    return false;
+                }
+            }
+        }
+
+        public new void Dispose()
+        {
+            ThreadStop();
         }
     }
 }
