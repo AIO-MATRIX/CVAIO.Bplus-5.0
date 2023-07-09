@@ -182,6 +182,7 @@ namespace CVAiO.Bplus.Algorithm
             if (RunStatus.ToolResult != EToolResult.Accept)
             {
                 string tmp = string.Format("RunStatus : {0}, {1} ", RunStatus.ToolResult, RunStatus.Message);
+                SB.Color = System.Drawing.Color.Red;
                 display.DrawString(tmp, font, SB, new System.Drawing.PointF(0, 200));
             }
         }
@@ -217,6 +218,7 @@ namespace CVAiO.Bplus.Algorithm
             if (RunStatus.ToolResult != EToolResult.Accept)
             {
                 string tmp = string.Format("RunStatus : {0}, {1} ", RunStatus.ToolResult, RunStatus.Message);
+                SB.Color = System.Drawing.Color.Red;
                 display.DrawString(tmp, font, SB, new System.Drawing.PointF(0, 200));
             }    
         }
@@ -275,8 +277,9 @@ namespace CVAiO.Bplus.Algorithm
             if (!AiO.IsPossibleImage(InImage1) || !AiO.IsPossibleImage(InImage2)) throw new Exception("InputImage 1/InputImage 2 = Null");
             try
             {
-                if (ObjPoint1 == null || ObjPoint2 == null) throw new Exception("Object Point 1/2 = Null");
-                if (TarPoint1 == null || TarPoint2 == null) throw new Exception("Object Point 1/2 = Null");
+                tarLine = null; objLine = null; tarOrigin = null; objOrigin = null;
+                if (ObjPoint1 == null || (ObjPoint1.X == 0 && ObjPoint1.Y == 0 && ObjPoint1.ThetaRad ==0 ) || ObjPoint2 == null || (ObjPoint1.X == 0 && ObjPoint1.Y == 0 && ObjPoint1.ThetaRad == 0)) throw new Exception("Object Point 1/2 = Null");
+                if (TarPoint1 == null || (TarPoint1.X == 0 && TarPoint1.Y == 0 && TarPoint1.ThetaRad == 0) || TarPoint2 == null || (TarPoint2.X == 0 && TarPoint2.Y == 0 && TarPoint2.ThetaRad == 0)) throw new Exception("Object Point 1/2 = Null");
 
                 CalibMatrix calibMatrix1 = new CalibMatrix(InImage1.CalibrationMat);
                 CalibMatrix calibMatrix2 = new CalibMatrix(InImage2.CalibrationMat);
@@ -292,9 +295,9 @@ namespace CVAiO.Bplus.Algorithm
                 targetTape.Z = (float)Math.Atan2(targetRight.Y - targetLeft.Y, targetRight.X - targetLeft.X);
 
                 // Đưa vào giá trị offset của Target Tape theo mm
-                tarOrigin.X = targetTape.X + (float)(RunParams.TarOffsetX * Math.Cos(RunParams.TarOffsetT) - RunParams.TarOffsetY * Math.Sin(RunParams.TarOffsetT));
-                tarOrigin.Y = targetTape.Y + (float)(RunParams.TarOffsetX * Math.Sin(RunParams.TarOffsetT) + RunParams.TarOffsetY * Math.Cos(RunParams.TarOffsetT));
-                tarOrigin.ThetaRad = targetTape.Z + RunParams.TarOffsetT;
+                TarOrigin.X = targetTape.X + (float)(RunParams.TarOffsetX * Math.Cos(RunParams.TarOffsetT) - RunParams.TarOffsetY * Math.Sin(RunParams.TarOffsetT));
+                TarOrigin.Y = targetTape.Y + (float)(RunParams.TarOffsetX * Math.Sin(RunParams.TarOffsetT) + RunParams.TarOffsetY * Math.Cos(RunParams.TarOffsetT));
+                TarOrigin.ThetaRad = targetTape.Z + RunParams.TarOffsetT;
 
                 Point2f objectLeft = AiO.VtoR(calibMatrix1, ObjPoint1.Point);
                 Point2f objectRight = AiO.VtoR(calibMatrix2 , ObjPoint2.Point);
@@ -307,9 +310,9 @@ namespace CVAiO.Bplus.Algorithm
                 objectTape.Z = (float)Math.Atan2(objectRight.Y - objectLeft.Y, objectRight.X - objectLeft.X);
 
                 // Đưa vào giá trị offset của Object Tape nếu cần, 
-                objOrigin.X = objectTape.X + (float)(RunParams.ObjOffsetX * Math.Cos(RunParams.ObjOffsetT) - RunParams.ObjOffsetY * Math.Sin(RunParams.ObjOffsetT));
-                objOrigin.Y = objectTape.Y + (float)(RunParams.ObjOffsetX * Math.Sin(RunParams.ObjOffsetT) + RunParams.ObjOffsetY * Math.Cos(RunParams.ObjOffsetT));
-                objOrigin.ThetaRad = objectTape.Z + RunParams.ObjOffsetT;
+                ObjOrigin.X = objectTape.X + (float)(RunParams.ObjOffsetX * Math.Cos(RunParams.ObjOffsetT) - RunParams.ObjOffsetY * Math.Sin(RunParams.ObjOffsetT));
+                ObjOrigin.Y = objectTape.Y + (float)(RunParams.ObjOffsetX * Math.Sin(RunParams.ObjOffsetT) + RunParams.ObjOffsetY * Math.Cos(RunParams.ObjOffsetT));
+                ObjOrigin.ThetaRad = objectTape.Z + RunParams.ObjOffsetT;
 
                 Point3f Offset3f = AiO.RToT(new Point3f(objOrigin.X, objOrigin.Y, (float)objOrigin.ThetaRad), new Point3f(tarOrigin.X, tarOrigin.Y, (float)tarOrigin.ThetaRad));
                 if (Offset3f.Z > Math.PI) Offset3f.Z -= (float)(2 * Math.PI);

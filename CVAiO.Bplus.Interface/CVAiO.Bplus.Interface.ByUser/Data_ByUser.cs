@@ -29,7 +29,7 @@ namespace CVAiO.Bplus.Interface.ByUser
         protected ushort id = 1;
         protected byte unit = 0;
         protected const int timeout = 20000;
-        protected uint threadSleep = 50;
+        protected uint threadSleep = 5;
         #endregion
 
         #region Properties
