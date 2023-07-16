@@ -95,8 +95,14 @@ namespace CVAiO.Bplus.ToolByUser
                 if (!AiO.IsPossibleImage(InImage)) throw new Exception("InputImage = Null");
                 if (OutImage != null) OutImage.Dispose();
                 OutImage = InImage.Clone(true);
-
-                // Do image processing
+                Mat findRegion = OutImage.Mat.SubMat((int)RunParams.SearchRegion.Y, (int)RunParams.SearchRegion.Y + (int)RunParams.SearchRegion.Height,
+                                                     (int)RunParams.SearchRegion.X, (int)RunParams.SearchRegion.X + (int)RunParams.SearchRegion.Width);
+                //AiO.ShowImage(findRegion, 1);
+                double min, max;
+                CVAiO2.MinMaxLoc(findRegion, out min, out max);
+                Scalar mean, dev;
+                CVAiO2.MeanStdDev(findRegion, out mean, out dev);
+                CVAiO2.Threshold(OutImage.Mat, OutImage.Mat, (int)(mean.ToDouble()- 3 * dev.ToDouble()), (int)(mean.ToDouble() + 3 * dev.ToDouble()), ThresholdTypes.Tozero);
 
                 outputImageInfo.Image = OutImage;
                 RunStatus = new RunStatus(EToolResult.Accept, "Succcess", DateTime.Now.Subtract(lastProcessTimeStart).TotalMilliseconds, DateTime.Now.Subtract(lastProcessTimeStart).TotalMilliseconds, null);

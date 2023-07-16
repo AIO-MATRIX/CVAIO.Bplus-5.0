@@ -113,7 +113,6 @@ namespace CVAiO.Bplus.HByUser
         public override void InitImageList()
         {
             inputImageInfo = new ImageInfo(string.Format("[{0}] InputImage", this.ToString()));
-
             outputImageInfo = new ImageInfo(string.Format("[{0}] OutputImage", this.ToString()));
             inputImageInfo.drawingFunc += DrawInputs;
             outputImageInfo.drawingFunc += DrawOutputs;
@@ -288,6 +287,9 @@ namespace CVAiO.Bplus.HByUser
             HOperatorSet.ClearOcrClassCnn(RunParams.OcrHandleUpper);
             HOperatorSet.ClearOcrClassCnn(RunParams.OcrHandleLower);
             HOperatorSet.ClearOcrClassCnn(RunParams.OcrHandleNumber);
+            RunParams.OcrHandleUpper = null;
+            RunParams.OcrHandleLower = null;
+            RunParams.OcrHandleNumber = null;
         }
     }
 

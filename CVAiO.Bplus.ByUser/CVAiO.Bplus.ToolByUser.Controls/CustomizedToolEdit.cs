@@ -23,6 +23,22 @@ namespace CVAiO.Bplus.ToolByUser.Controls
             InitializeComponent();
             InitBinding();
             this.SubjectChanged += ImageBlurEdit_SubjectChanged;
+            this.DisplayViewEdit.SelectedImageChanged += DisplayViewEdit_SelectedImageChanged;
+            this.DisplayViewEdit.DisplayViewInteract.DrawObjectChanged += DisplayViewInteract_DrawObjectChanged;
+        }
+        private void DisplayViewEdit_SelectedImageChanged(object sender, ImageInfo imageInfo)
+        {
+            if (imageInfo.ImageName.Contains("InputImage"))
+            {
+                if (Subject.InImage == null) return;
+                DisplayViewEdit.DisplayViewInteract.Image = Subject.InImage;
+                DisplayViewEdit.DisplayViewInteract.InteractiveGraphicsCollection.Add(Subject.RunParams.SearchRegion);
+            }
+        }
+        private void DisplayViewInteract_DrawObjectChanged(object sender, InteractDrawObject drawObject)
+        {
+            ToolProperty.Refresh();
+            DisplayViewEdit.DisplayViewInteract.GraphicsFuncCollection.Clear();
         }
         private void ImageBlurEdit_SubjectChanged(object sender, ToolBase tool)
         {

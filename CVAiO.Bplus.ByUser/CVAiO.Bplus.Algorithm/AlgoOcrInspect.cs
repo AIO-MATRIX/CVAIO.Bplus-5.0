@@ -20,13 +20,14 @@ namespace CVAiO.Bplus.Algorithm
         [NonSerialized]
         private Image inImage;
         [NonSerialized]
+        private Image outImage;
+        [NonSerialized]
         private string inOcr1;
         [NonSerialized]
         private string inOcr2;
-        [NonSerialized]
-        private string inOcr3;
 
         private ImageInfo inputImageInfo;
+        private ImageInfo outputImageInfo;
 
         private AlgoOcrInspectRunParams runParams;
 
@@ -65,8 +66,9 @@ namespace CVAiO.Bplus.Algorithm
         [InputParam, ReadOnly(true), Category("4. Input")]
         public string InOcr2 { get => inOcr2; set => inOcr2 = value; }
 
-        [InputParam, ReadOnly(true), Category("4. Input")]
-        public string InOcr3 { get => inOcr3; set => inOcr3 = value; }
+        [OutputParam, Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Image OutImage { get => outImage; set => outImage = value; }
+
         #endregion
 
         public AlgoOcrInspect()
@@ -89,7 +91,6 @@ namespace CVAiO.Bplus.Algorithm
             inParams.Add("InImage", null);
             inParams.Add("InOcr1", null);
             inParams.Add("InOcr2", null);
-            inParams.Add("InOcr3", null);
             inParams.Add("Calc", null);
         }
         public override void InitOutParams()
@@ -98,11 +99,25 @@ namespace CVAiO.Bplus.Algorithm
         public override void InitImageList()
         {
             inputImageInfo = new ImageInfo(string.Format("[{0}] InputImage", this.ToString()));
+            inputImageInfo.drawingFunc += DrawInputs;
+            outputImageInfo = new ImageInfo(string.Format("[{0}] OutputImage", this.ToString()));
+            outputImageInfo.drawingFunc += DrawOutputs;
             imageList.Add(inputImageInfo);
+            imageList.Add(outputImageInfo);
         }
-        public void DrawResult(DisplayView display)
+        public void DrawInputs(DisplayView display)
         {
             if (display.Image == null) return;
+            //display.DrawLine(....)
+        }
+
+        public void DrawOutputs(DisplayView display)
+        {
+            if (display.Image == null) return;
+            System.Drawing.Font f = new System.Drawing.Font("굴림체", 15, System.Drawing.FontStyle.Bold);
+            System.Drawing.SolidBrush SB = new System.Drawing.SolidBrush(System.Drawing.Color.Blue);
+            display.DrawString(InOcr1, f, SB, new Point2d(700, 100));
+            display.DrawString(InOcr2, f, SB, new Point2d(700, 370));
         }
         public override void InitOutProperty()
         {
@@ -121,10 +136,12 @@ namespace CVAiO.Bplus.Algorithm
             try
             {
                 algoJudgement = true;
-                if (inOcr1 != RunParams.Ocr1 || inOcr2 != RunParams.Ocr2 || inOcr3 != RunParams.Ocr3)
-                    algoJudgement = false; 
+                OutImage = new Image(InImage.Mat.SubMat((int)RunParams.SearchRegion.Y, (int)RunParams.SearchRegion.Y + (int)RunParams.SearchRegion.Height,
+                                                     (int)RunParams.SearchRegion.X, (int)RunParams.SearchRegion.X + (int)RunParams.SearchRegion.Width).Clone());
+                //if (inOcr1 != RunParams.Ocr1 || inOcr2 != RunParams.Ocr2 || inOcr3 != RunParams.Ocr3)
+                //    algoJudgement = false; 
+                outputImageInfo.Image = OutImage;
                 RunStatus = new RunStatus(EToolResult.Accept, "Succcess", DateTime.Now.Subtract(lastProcessTimeStart).TotalMilliseconds, DateTime.Now.Subtract(lastProcessTimeStart).TotalMilliseconds, null);
-                OnRan();
             }
             catch (Exception ex)
             {
@@ -150,12 +167,25 @@ namespace CVAiO.Bplus.Algorithm
     public class AlgoOcrInspectRunParams : RunParams, ISerializable
     {
         #region Fields
+        private InteractRectangle searchRegion;
         private string ocr1;
         private string ocr2;
         private string ocr3;
         #endregion
 
         #region Properties
+        [TypeConverterAttribute(typeof(ExpandableObjectConverter))]
+        [Description("SearchRegion"), PropertyOrder(30)]
+        public InteractRectangle SearchRegion
+        {
+            get
+            {
+                if (searchRegion == null) searchRegion = new InteractRectangle(0, 0, 200, 200);
+                return searchRegion;
+            }
+            set => searchRegion = value;
+        }
+
         public string Ocr1
         {
             get => ocr1;

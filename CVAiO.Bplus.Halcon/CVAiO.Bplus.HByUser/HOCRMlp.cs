@@ -286,6 +286,9 @@ namespace CVAiO.Bplus.HByUser
             HOperatorSet.ClearOcrClassMlp(RunParams.OcrHandleUpper);
             HOperatorSet.ClearOcrClassMlp(RunParams.OcrHandleLower);
             HOperatorSet.ClearOcrClassMlp(RunParams.OcrHandleNumber);
+            RunParams.OcrHandleUpper = null;
+            RunParams.OcrHandleLower = null;
+            RunParams.OcrHandleNumber = null;
         }
     }
 

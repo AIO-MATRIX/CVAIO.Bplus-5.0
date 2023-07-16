@@ -17,6 +17,7 @@ namespace CVAiO.Bplus.ToolByUser
         private double paramDouble = 1.0;
         private bool paramBool = true;
         private float paramFloat = 2.0f;
+        private InteractRectangle searchRegion;
         #endregion
 
         #region Properties
@@ -29,6 +30,18 @@ namespace CVAiO.Bplus.ToolByUser
         public bool ParamBool { get => paramBool; set => paramBool = value; }
         [Description("Please define all the parameter needed for tool processing"), Category("Tool By User")]
         public float ParamFloat { get => paramFloat; set => paramFloat = value; }
+
+        [TypeConverterAttribute(typeof(ExpandableObjectConverter))]
+        [Description("SearchRegion"), PropertyOrder(30)]
+        public InteractRectangle SearchRegion
+        {
+            get
+            {
+                if (searchRegion == null) searchRegion = new InteractRectangle(0, 0, 200, 200);
+                return searchRegion;
+            }
+            set => searchRegion = value;
+        }
 
         #endregion
         public CustomizedToolRunParams()
