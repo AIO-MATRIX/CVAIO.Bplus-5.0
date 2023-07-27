@@ -149,7 +149,7 @@ namespace CVAiO.Bplus.HByUser
             RunStatus = new RunStatus(EToolResult.Waiting, "Tool has not run yet. Please Run Tool first. ");
             if (OutImage != null) OutImage.Dispose();
             OutImage = null;
-            dataOCR = "";
+            dataOCR = null;
             GetOutParams();
         }
         #endregion
@@ -180,6 +180,7 @@ namespace CVAiO.Bplus.HByUser
                                     x.Left > RunParams.SearchRegion.X && x.Left + x.Width < RunParams.SearchRegion.X + RunParams.SearchRegion.Width
                                     && x.Top > RunParams.SearchRegion.Y && x.Top + x.Height < RunParams.SearchRegion.Y + RunParams.SearchRegion.Height);
                 if (filteredBlobs.Count == 0) throw new Exception("No Region found");
+                if (filteredBlobs.Count != RunParams.WordParsed.Length) throw new Exception("Number of Blobs & Length of Word Parsed not Matched");
                 int countChar = 0;
                 int maxHeight = filteredBlobs.Max(x => x.Height);
                 int avarageBottom = (int)filteredBlobs.Average(x => (x.Top + x.Height));

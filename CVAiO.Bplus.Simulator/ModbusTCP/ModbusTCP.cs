@@ -221,7 +221,8 @@ namespace CVAiO.Bplus.Simulator.ModbusTCP
                 CallException(id, unit, fctReadCoil, excIllegalDataVal);
                 return;
             }
-            values = WriteSyncData(CreateReadHeader(id, unit, startAddress, numInputs, fctReadCoil), id);
+            byte[] header = CreateReadHeader(id, unit, startAddress, numInputs, fctReadCoil);
+            values = WriteSyncData(header, id);
         }
 
         // ------------------------------------------------------------------------

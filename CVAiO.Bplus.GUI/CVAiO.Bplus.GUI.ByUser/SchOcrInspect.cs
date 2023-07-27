@@ -113,7 +113,6 @@ namespace CVAiO.Bplus.GUI.ByUser
                 // Send Object Position to PLC
                 IFCommunication.ComData.WriteValue((int)IFCommunication.DataAddr + ocr1OffsetAddr, (string)((AlgorithmTool as AlgoOcrInspect).InOcr1));
                 IFCommunication.ComData.WriteValue((int)IFCommunication.DataAddr + ocr2OffsetAddr, (string)((AlgorithmTool as AlgoOcrInspect).InOcr2));
-                IFCommunication.ComData.WriteValue((int)IFCommunication.DataAddr + ocr3OffsetAddr, (string)((AlgorithmTool as AlgoOcrInspect).InOcr3));
                 // End code here
                 return true;
             }
@@ -133,8 +132,7 @@ namespace CVAiO.Bplus.GUI.ByUser
                 List<string> listOcr = new List<string>();
                 listOcr.Add((string)((AlgorithmTool as AlgoOcrInspect).InOcr1));
                 listOcr.Add((string)((AlgorithmTool as AlgoOcrInspect).InOcr2));
-                listOcr.Add((string)((AlgorithmTool as AlgoOcrInspect).InOcr3));
-                DicDisplay.AddList("Offset", string.Format("{0},{1:f3},{2:f3},{3:f3}", DateTime.Now.ToString("HH:mm:ss:fff"), listOcr[0], listOcr[1], listOcr[2]));
+                DicDisplay.AddList("Offset", string.Format("{0},{1:f3},{2:f3},{3:f3}", DateTime.Now.ToString("HH:mm:ss:fff"), listOcr[0], listOcr[1]));
 
                 // End code here
                 return true;

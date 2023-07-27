@@ -138,14 +138,15 @@ namespace CVAiO.Bplus.Algorithm
                 algoJudgement = true;
                 OutImage = new Image(InImage.Mat.SubMat((int)RunParams.SearchRegion.Y, (int)RunParams.SearchRegion.Y + (int)RunParams.SearchRegion.Height,
                                                      (int)RunParams.SearchRegion.X, (int)RunParams.SearchRegion.X + (int)RunParams.SearchRegion.Width).Clone());
-                //if (inOcr1 != RunParams.Ocr1 || inOcr2 != RunParams.Ocr2 || inOcr3 != RunParams.Ocr3)
-                //    algoJudgement = false; 
+                if (inOcr1.Length != RunParams.Ocr1.Length || inOcr2.Length != RunParams.Ocr2.Length)
+                    throw new Exception("Found OCR format not matched");
                 outputImageInfo.Image = OutImage;
                 RunStatus = new RunStatus(EToolResult.Accept, "Succcess", DateTime.Now.Subtract(lastProcessTimeStart).TotalMilliseconds, DateTime.Now.Subtract(lastProcessTimeStart).TotalMilliseconds, null);
             }
             catch (Exception ex)
             {
                 RunStatus = new RunStatus(EToolResult.Error, ex.ToString());
+                algoJudgement = false;
             }
         }
         public override void Reset()
@@ -170,7 +171,6 @@ namespace CVAiO.Bplus.Algorithm
         private InteractRectangle searchRegion;
         private string ocr1;
         private string ocr2;
-        private string ocr3;
         #endregion
 
         #region Properties
@@ -206,23 +206,11 @@ namespace CVAiO.Bplus.Algorithm
                 NotifyPropertyChanged(nameof(Ocr2));
             }
         }
-        public string Ocr3 
-        {
-            get => ocr3;
-            set
-            {
-                if (ocr3 == value) return;
-                ocr3 = value;
-                NotifyPropertyChanged(nameof(Ocr3));
-            }
-        }
-
         #endregion
         public AlgoOcrInspectRunParams()
         {
-            ocr1 = "";
-            ocr2 = "";
-            ocr3 = "";
+            ocr1 = "ddmmyy";
+            ocr2 = "ddmmyy";
         }
 
         #region Do not change
