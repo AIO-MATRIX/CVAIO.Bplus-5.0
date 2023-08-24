@@ -4,10 +4,10 @@ Với mục tiêu giảm thiểu thời gian phát triển một chương trình
 
 **Technical Support** <br />
 Website: aiomatrix.vn <br />
-Email: <br />
+Email: info@aiomatrix.vn<br />
 Mobile: 035.831.2826 <br />
-Facebook: <br />
-Zalo: <br />
+Facebook: aio-matrix<br />
+Zalo: 035.831.2826<br />
 
 ![image](https://github.com/AIO-MATRIX/CVAIO.Bplus-5.0/assets/133294265/3ce28859-a60f-4cb2-acde-ee47183108f0)
 
