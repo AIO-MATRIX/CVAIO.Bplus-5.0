@@ -1,7 +1,7 @@
 ﻿
 namespace CVAiO.Bplus.Algorithm.Controls
 {
-    partial class AlgoTapeAlign2P_Object2TargetEdit
+    partial class AlgoObjectAlign2PEdit
     {
         /// <summary> 
         /// Required designer variable.
