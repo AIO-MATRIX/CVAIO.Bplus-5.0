@@ -198,8 +198,9 @@ namespace CVAiO.Bplus.CogByUser
                 CogFindLineTool.InputImage =  cogFixtureTool.OutputImage as CogImage8Grey;
                 CogFindLineTool.Run();
                 if (CogFindLineTool.RunStatus.Result != CogToolResultConstants.Accept) throw new Exception(CogFindLineTool.RunStatus.Message);
-                Line = new InteractLine(CogFindLineTool.Results.GetLine().X, CogFindLineTool.Results.GetLine().Y,
-                                        CogFindLineTool.Results.GetLine().X + 100 * Math.Cos(CogFindLineTool.Results.GetLine().Rotation), CogFindLineTool.Results.GetLine().Y + 100 * Math.Sin(CogFindLineTool.Results.GetLine().Rotation));
+                if (CogFindLineTool.Results.GetLineSegment() == null) throw new Exception("CogFindLineTool.Results.GetLineSegment() == Null");
+                Line = new InteractLine(CogFindLineTool.Results.GetLineSegment().StartX, CogFindLineTool.Results.GetLineSegment().StartY,
+                                        CogFindLineTool.Results.GetLineSegment().EndX, CogFindLineTool.Results.GetLineSegment().EndY);
                 RunStatus = new RunStatus(EToolResult.Accept, "Succcess", DateTime.Now.Subtract(lastProcessTimeStart).TotalMilliseconds, DateTime.Now.Subtract(lastProcessTimeStart).TotalMilliseconds, null);
             }
             catch (Exception ex)
