@@ -114,7 +114,7 @@ namespace CVAiO.Bplus.Algorithm
         public void DrawOutputs(DisplayView display)
         {
             if (display.Image == null) return;
-            System.Drawing.Font f = new System.Drawing.Font("굴림체", 15, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font f = new System.Drawing.Font("Microsoft Sans Serif", 15, System.Drawing.FontStyle.Bold);
             System.Drawing.SolidBrush SB = new System.Drawing.SolidBrush(System.Drawing.Color.Blue);
             display.DrawString(InOcr1, f, SB, new Point2d(700, 100));
             display.DrawString(InOcr2, f, SB, new Point2d(700, 370));

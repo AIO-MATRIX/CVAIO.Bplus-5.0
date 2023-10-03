@@ -123,19 +123,23 @@ namespace CVAiO.Bplus.HByUser
             if (!AiO.IsPossibleImage(InImage) || Blobs == null || Blobs.Count == 0) return;
             display.GraphicsFuncCollection.Clear();
             Random rnd = new Random();
+            System.Drawing.Font font = new System.Drawing.Font("Microsoft Sans Serif", 15, System.Drawing.FontStyle.Bold);
+            System.Drawing.SolidBrush solidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Blue);
+            int count = 0;
             foreach (ConnectedComponents.Blob blob in Blobs)
             {
                 if (blob.Left < RunParams.SearchRegion.X || blob.Left + blob.Width > RunParams.SearchRegion.X + RunParams.SearchRegion.Width ||
                     blob.Top < RunParams.SearchRegion.Y || blob.Top + blob.Height > RunParams.SearchRegion.Y + RunParams.SearchRegion.Height) continue;
                 Rectf rectF = new Rectf(blob.Left, blob.Top, blob.Width, blob.Height);
                 display.DrawRectangle(new System.Drawing.Pen(System.Drawing.Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256)), 1), rectF);
+                display.DrawString(count++.ToString(), font, solidBrush, new System.Drawing.PointF(blob.Left, blob.Top));
             }
         }
 
         public void DrawOutputs(DisplayView display)
         {
             if (!AiO.IsPossibleImage(OutImage) || listChar.Count == 0 || listPosition.Count != listChar.Count) return;
-            System.Drawing.Font f = new System.Drawing.Font("굴림체", 15, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font f = new System.Drawing.Font("Microsoft Sans Serif", 15, System.Drawing.FontStyle.Bold);
             System.Drawing.SolidBrush SB = new System.Drawing.SolidBrush(System.Drawing.Color.Blue);
             int minY = (int)listPosition.Min(x => x.Y);
             for (int i = 0; i < listChar.Count; i++)

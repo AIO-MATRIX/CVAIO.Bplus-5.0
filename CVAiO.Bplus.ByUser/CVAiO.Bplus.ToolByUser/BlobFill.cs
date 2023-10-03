@@ -107,7 +107,7 @@ namespace CVAiO.Bplus.ToolByUser
             display.GraphicsFuncCollection.Clear();
             System.Drawing.Pen CyanPen = new System.Drawing.Pen(System.Drawing.Color.Cyan, 1);
             System.Drawing.Pen RedPen = new System.Drawing.Pen(System.Drawing.Color.Red, 3);
-            System.Drawing.Font f = new System.Drawing.Font("굴림", 10, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font f = new System.Drawing.Font("Microsoft Sans Serif", 10, System.Drawing.FontStyle.Bold);
             System.Drawing.SolidBrush SB = new System.Drawing.SolidBrush(System.Drawing.Color.Cyan);
             Random rnd = new Random();
             for (int i = 0; i < ContourRect.Count; i++)

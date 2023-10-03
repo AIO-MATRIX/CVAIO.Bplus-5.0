@@ -117,7 +117,7 @@ namespace CVAiO.Bplus.ToolByUser
         {
             if (display.Image == null) return;
             if (YoloPredictions == null || YoloPredictions.Count == 0) return;
-            System.Drawing.Font font = new System.Drawing.Font("굴림체", 10, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font font = new System.Drawing.Font("Microsoft Sans Serif", 10, System.Drawing.FontStyle.Bold);
             System.Drawing.SolidBrush solidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Blue);
             foreach (YoloPrediction yoloPrediction in YoloPredictions)
             {

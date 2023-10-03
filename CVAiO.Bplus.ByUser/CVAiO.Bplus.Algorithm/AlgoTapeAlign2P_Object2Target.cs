@@ -155,7 +155,7 @@ namespace CVAiO.Bplus.Algorithm
             if (display.Image == null || InImage1 == null) return;
             display.GraphicsFuncCollection.Clear();
             CalibMatrix calibMatrix1 = new CalibMatrix(InImage1.CalibrationMat);
-            System.Drawing.Font font = new System.Drawing.Font("Arial", 10, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font font = new System.Drawing.Font("Microsoft Sans Serif", 10, System.Drawing.FontStyle.Bold);
             if (TarLine != null)
             {
                 DrawInfos(display, TarLine, calibMatrix1, System.Drawing.Color.Green, font);
@@ -191,7 +191,7 @@ namespace CVAiO.Bplus.Algorithm
             if (display.Image == null || InImage2 == null) return;
             display.GraphicsFuncCollection.Clear();
             CalibMatrix calibMatrix2 = new CalibMatrix(InImage2.CalibrationMat);
-            System.Drawing.Font font = new System.Drawing.Font("Arial", 10, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font font = new System.Drawing.Font("Microsoft Sans Serif", 10, System.Drawing.FontStyle.Bold);
             if (TarLine != null)
             {
                 DrawInfos(display, TarLine, calibMatrix2, System.Drawing.Color.Green, font);

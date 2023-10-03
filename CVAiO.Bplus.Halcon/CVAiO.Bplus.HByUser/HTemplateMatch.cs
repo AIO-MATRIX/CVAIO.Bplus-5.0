@@ -164,7 +164,7 @@ namespace CVAiO.Bplus.HByUser
         public virtual void DrawOutputs(DisplayView display)
         {
             if (!AiO.IsPossibleImage(OutImage)) return;
-            System.Drawing.Font f = new System.Drawing.Font("굴림체", 10, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font f = new System.Drawing.Font("Microsoft Sans Serif", 10, System.Drawing.FontStyle.Bold);
             System.Drawing.SolidBrush SB;
             Point2d P0 = new Point2d(0, 0);
             Point2d P1, P2;

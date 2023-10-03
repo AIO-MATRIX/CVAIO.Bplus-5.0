@@ -139,7 +139,7 @@ namespace CVAiO.Bplus.Algorithm
             display.GraphicsFuncCollection.Clear();
             System.Drawing.Pen CyanPen = new System.Drawing.Pen(System.Drawing.Color.Cyan, 1);
             System.Drawing.Pen RedPen = new System.Drawing.Pen(System.Drawing.Color.Red, 3);
-            System.Drawing.Font f = new System.Drawing.Font("굴림", 10, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font f = new System.Drawing.Font("Microsoft Sans Serif", 10, System.Drawing.FontStyle.Bold);
             System.Drawing.SolidBrush SB = new System.Drawing.SolidBrush(System.Drawing.Color.Cyan);
 
             display.DrawCross(RedPen, AiO.ImageToFixture2D(Point1.Point2d, inImage1.TransformMat), 20, 20, 0);
@@ -152,7 +152,7 @@ namespace CVAiO.Bplus.Algorithm
             display.GraphicsFuncCollection.Clear();
             System.Drawing.Pen CyanPen = new System.Drawing.Pen(System.Drawing.Color.Cyan, 1);
             System.Drawing.Pen RedPen = new System.Drawing.Pen(System.Drawing.Color.Red, 3);
-            System.Drawing.Font f = new System.Drawing.Font("굴림", 10, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font f = new System.Drawing.Font("Microsoft Sans Serif", 10, System.Drawing.FontStyle.Bold);
             System.Drawing.SolidBrush SB = new System.Drawing.SolidBrush(System.Drawing.Color.Cyan);
 
             display.DrawCross(RedPen, AiO.ImageToFixture2D(Point2.Point2d, inImage2.TransformMat), 20, 20, 0);

@@ -99,7 +99,7 @@ namespace CVAiO.Bplus.HByUser
             {
                 display.DrawLine(GreenPen, new Point2d(interactPolyline[i].X, interactPolyline[i].Y), new Point2d(interactPolyline[(i + 1) % interactPolyline.Count].X, interactPolyline[(i + 1) % interactPolyline.Count].Y));
             }
-            System.Drawing.Font f = new System.Drawing.Font("굴림체", 10, System.Drawing.FontStyle.Bold);
+            System.Drawing.Font f = new System.Drawing.Font("Microsoft Sans Serif", 10, System.Drawing.FontStyle.Bold);
             System.Drawing.SolidBrush SB = new System.Drawing.SolidBrush(System.Drawing.Color.Blue);
             display.DrawString(DataCode, f, SB, new Point2d(interactPolyline[0].X, interactPolyline[0].Y));
         }
