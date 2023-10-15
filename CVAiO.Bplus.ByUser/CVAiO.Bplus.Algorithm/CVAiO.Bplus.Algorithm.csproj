@@ -75,6 +75,7 @@
     <Compile Include="AlgoObjectAlign1P.cs" />
     <Compile Include="AlgoInspectAI.cs" />
     <Compile Include="AlgoStandard.cs" />
+    <Compile Include="AlgoTapeInspection.cs" />
     <Compile Include="IAlgorithm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

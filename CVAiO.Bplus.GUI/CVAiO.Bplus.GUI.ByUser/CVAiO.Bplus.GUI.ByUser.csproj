@@ -93,6 +93,7 @@
     <Compile Include="SchTapeAlign2P_Object2Target.cs" />
     <Compile Include="SchObjectAlign2P.cs" />
     <Compile Include="SchObjectAlign1P.cs" />
+    <Compile Include="SchTapeInspection.cs" />
     <Compile Include="SettingGUI\UserSetting.cs">
       <SubType>UserControl</SubType>
     </Compile>
