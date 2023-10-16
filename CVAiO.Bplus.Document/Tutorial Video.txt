@@ -1,0 +1,20 @@
+Full Playlist: 
+	https://youtube.com/playlist?list=PLqDyBQNoY4fkGBD0NA2EsJX-ZQgd3iBgo&si=IRt-aLNqjMwYZdyW
+	
+Tutorial 1: Setup and Run B+ Platform
+	https://youtu.be/Lhhz2fISsR0?si=w1vBbBjyUlcOL3Sh
+
+Tutorial 2: Build Program From Source
+	https://youtu.be/ZVci0KFtuic?si=QBFygAdVaGQDHWqv
+
+Tutorial 3: Programming and Simulation
+	https://youtu.be/aes-y6ocMGo?si=8GZi_M59-iKkt-Dp
+	
+Tutorial 4: Interface with PLC
+	https://youtu.be/znWdWGivDyw?si=AbO2Dq8g_vnbDmew
+	
+Tutorial 5: Calibration - Manual vs Auto
+	https://youtu.be/abfu1AMGtmc?si=CEJFp3M_FfhJ6eHO
+	
+Tutorial 6: Inspection by Histogram
+	https://youtu.be/b_BW5kqAl58?si=TSeln7CjxjeWfnac

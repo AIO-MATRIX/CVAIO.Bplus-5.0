@@ -1,0 +1,71 @@
+Full Playlist:
+	https://youtube.com/playlist?list=PLqDyBQNoY4fnynPII1Rkp1GPFGUsQqYGa&si=XTDRuRSA0irVjOYZ
+	
+Tool 1: Image Acquisition
+	https://youtu.be/0maFUyeRAqY?si=RPElKpv9lQHvCtdd
+	
+Tool 2: Image Load
+	https://youtu.be/2q1cF7Di0f0?si=dfioAqqZjDXGoupp
+	
+Tool 3: Region of Interest ROI
+	https://youtu.be/Y7EeFFmg1Ao?si=dC4Pl2TMpzlsfZOO
+	
+Tool 4: Template Matching
+	https://youtu.be/jH3jMvUfqis?si=mWbFMZ2qDX7zVJwQ
+	
+Tool 5: Template Matching - MultiMark
+	https://youtu.be/gvBNveUUyJM?si=b-gYKkw7NO3oudtZ
+	
+Tool 6: Find Chessboard
+	https://youtu.be/WN_zHibkXmM?si=YbSjN_gcABUzUT8O
+
+Tool 7: QR Decode
+	https://youtu.be/3SnjkTk5Y0M?si=WesO9ZQrsZkKZg6A
+
+Tool 8: Find Line
+	https://youtu.be/rRJrsRuDl90?si=dt7Aks2ocQkhONUN
+
+Tool 9: Find Circle
+	https://youtu.be/cKTyXfUoF_w?si=4b6Uiwrj-98X56cZ
+
+Tool 10: Find Corner
+	https://youtu.be/-oppyzYgnAM?si=ObaoLCPSEmP2Pri_
+	
+Tool 11: Find Point Line
+	https://youtu.be/vUBaMRW_3cM?si=wmN4UgyEEIPZ81w0
+
+Tool 12: Find Point Circle
+	https://youtu.be/6YQSiJ4sPq8?si=YoOwej98tZHddeRZ
+
+Tool 13: Find Point 1D
+	https://youtu.be/anyqZT0G1PU?si=Mquk8A_NrjbeY6my
+	
+Tool 14: Distance Line
+	https://youtu.be/6waBvL50puQ?si=b6DxPp8Ry7EE9Uj1
+
+Tool 15: Distance Circle
+	https://youtu.be/IhbD8oiO3Zs?si=Qg2MBqDFeG_HHrjj
+
+Tool 16: Distance Points
+	https://youtu.be/RQgE4InXxmo?si=3tKeEwbnj3hzQZBC
+
+Tool 17: Wrapping
+	https://youtu.be/2kyOD2tZiaQ?si=ZmZoyQ2AiMD-fMFb
+
+Tool 18: Image Processing
+	https://youtu.be/7tJllB6FNTE?si=qiXH6OPlTYPsUQ9b
+
+Tool 19: (Cognex) Find Line
+	https://youtu.be/7ovjOuvM0KM?si=8bnWmC7NQO4EZiU-
+
+Tool 20: (Cognex) PMAlign
+	https://youtu.be/BptsKxlN2JA?si=Fk5IS07umgLuNR1g
+
+Tool 21: (Halcon) DataCode2D
+	https://youtu.be/y6yakhTKDUY?si=6JKRLYekMWUH4FdQ
+
+Tool 22: (Halcon) Template Matching
+	https://youtu.be/aSE1Zi1C2yc?si=JQ1kITD58wSvdrdi
+
+Tool 23: (Halcon) OCR
+	https://youtu.be/nvjYSJLApHM?si=VfVnA5snhbjrmUCK

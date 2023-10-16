@@ -1,0 +1,50 @@
+Full Playlist
+	https://youtube.com/playlist?list=PLqDyBQNoY4fm6UbTLfwrMKNTF9DQrn7fg&si=PLy84kke0sdsc72-
+
+Coding 1: Build from Source
+	https://youtu.be/GDRI0LhfyXs?si=Xzlw-MWQeH_x5NEM
+	
+Coding 2: New Algorithm
+	https://youtu.be/Sar0NfeCjDQ?si=4o6g5-e_9Wy2xElS
+	
+Coding 3: New Tool - OpenCV
+	https://youtu.be/aZW7UxRANpo?si=XZfG6NUYtp_ZiYQ4
+	
+Coding 4: Add Inputs & Outputs
+	https://youtu.be/SK7nNCiwhJA?si=oapj7OsVYZPZP4mO
+	
+Coding 5: Add Parameters 
+	https://youtu.be/CvSW4LuKPYQ?si=BHKsHvIckb74x6sn
+
+Coding 6: Add Calibration Matrix
+	https://youtu.be/7xG8OLtL64g?si=TKnEB9H6fJsV7LBL
+
+Coding 7: Pixel to MM
+	https://youtu.be/xmzkVtBdnkc?si=iOw0RJB-hOf63WPj
+
+Coding 8: Vision to Robot Coordinate
+	https://youtu.be/7RbnTHY2ndI?si=P3loqJC5lH9ZXVB1
+
+Coding 9: Add Interact Objects
+	https://youtu.be/oPtgfcH9SAc?si=4Ts8uhsj-cy8wbIM
+
+Coding 10: Display Results
+	https://youtu.be/SoFbDIaO-hc?si=Ujo6uG0uTgWnjRhR
+
+Coding 11: User Display
+	https://youtu.be/sNsYGHxPgkc?si=hIss1SkJVaD6z6sN
+
+Coding 12: New Scheduler
+	https://youtu.be/yijCS-9COcY?si=XeL9fVCPVKUZIm1J
+
+Coding 13: Get Algorithm Data
+	https://youtu.be/WyCtyWaRNSU?si=NcCoGoJ3T8PYOD-q
+
+Coding 14: Send Data to PLC
+	https://youtu.be/kkzDfawNZuQ?si=iCTflExF1ReNrTAP
+	
+Coding 15: Add List and Graph Data
+	https://youtu.be/ie47alEjQI4?si=reE0zKjeDOi1xug5
+
+Coding 16: Skip Trigger Process
+	https://youtu.be/XoME8DfqlNo?si=3y6_cTjR9vmgqcvd

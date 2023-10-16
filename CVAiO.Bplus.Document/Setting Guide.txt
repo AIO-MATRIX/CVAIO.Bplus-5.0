@@ -1,0 +1,14 @@
+Full Playlist:
+	https://youtube.com/playlist?list=PLqDyBQNoY4flBkvDQ2bDn7QLekSAM7dG8&si=_X4d9ze4tIXTDN0J
+
+Setting 1: Enable Cognex & Halcon
+	https://youtu.be/1gEKPx8Wn7E?si=sPeFHO9srQQ4m80J
+	
+Setting 2: Disable Auto Calibration
+	https://youtu.be/H8CL0oRqJmQ?si=HjW8djfVr353juSF
+
+Setting 3: Remove Unused Camera Type
+	https://youtu.be/Wghdji_oxYc?si=L83qR5GTvLYa1gTn
+
+Setting 4: Remove Unused Interface Type
+	https://youtu.be/eD7oqIL7GeY?si=cMSduz63ac9mfagJ
