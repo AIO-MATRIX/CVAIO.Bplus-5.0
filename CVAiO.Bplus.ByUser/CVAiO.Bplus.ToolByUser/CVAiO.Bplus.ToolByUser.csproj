@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlobFill.cs" />
+    <Compile Include="FindFillLevel.cs" />
     <Compile Include="InspectionAI.cs" />
     <Compile Include="InspectionAIRunParams.cs" />
     <Compile Include="ObjectSegmentation.cs" />

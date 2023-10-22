@@ -86,6 +86,12 @@
     <Compile Include="BlobFillEdit.Designer.cs">
       <DependentUpon>BlobFillEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="FindFillLevelEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FindFillLevelEdit.Designer.cs">
+      <DependentUpon>FindFillLevelEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="InspectionAIEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -29,6 +29,13 @@ namespace CVAiO.Bplus
             }
             Application.ThreadException += Application_ThreadException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            // Nếu gặp lỗi :
+            // System.IO.FileNotFoundException: 'Could not load file or assembly
+            // 'CVAiO.Bplus.GUI.ByUser, Version = 1.0.0.0, Culture = neutral,
+            // PublicKeyToken = null' or one of its dependencies. The system cannot
+            // find the file specified.'
+            // Nguyên nhân do source code down về chưa được build
+            // Chọn: Build -> Build Solution hoặc Ctrl + Shift + B
             Application.Run(new CVAiO.Bplus.MainGUI.MainGUI()); 
             //Application.Run(new ProcessCreatorUI());
             //Application.Run(new AutoCalibrationUI());

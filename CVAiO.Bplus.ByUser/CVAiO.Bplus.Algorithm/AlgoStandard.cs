@@ -19,7 +19,7 @@ namespace CVAiO.Bplus.Algorithm
         #region Fields
         [NonSerialized]
         private Image inImage;
-        
+
         [NonSerialized]
         private Image outImage;
         private ImageInfo inputImageInfo;
@@ -53,6 +53,9 @@ namespace CVAiO.Bplus.Algorithm
         private float value8;
         [NonSerialized]
         private float value9;
+
+        [NonSerialized]
+        private bool inspectionResult;
 
         #endregion
 
@@ -90,18 +93,13 @@ namespace CVAiO.Bplus.Algorithm
         [InputParam, Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public float Value9 { get => value9; set => value9 = value; }
 
-        [Description("Number of Input Values (1 ~ 10)"), Category("3. Tool Params"), PropertyOrder(20)]
+        [Description("Number of Input Values (0 ~ 10)"), Category("3. Tool Params"), PropertyOrder(20), ReadOnly(true)]
         public int ValueCount
         {
             get => valueCount;
             set
             {
-                if (valueCount == value || value < 1 || value > 10) return;
-                if (value < inParams.Count - 2)
-                {
-                    frmMessageBox.Show(EMessageIcon.Warning, "Number of value count must be bigger than Input Value", 3000);
-                    return;
-                }
+                if (valueCount == value || value < 0 || value > 10) return;
                 valueCount = value;
                 if (2 * valueCount > RunParams.CustomProperties.Count)
                 {
@@ -115,7 +113,7 @@ namespace CVAiO.Bplus.Algorithm
                 {
                     for (int i = RunParams.CustomProperties.Count; i > 2 * valueCount; i--)
                     {
-                        RunParams.CustomProperties.RemoveAt(i-1);
+                        RunParams.CustomProperties.RemoveAt(i - 1);
                     }
                 }
                 NotifyPropertyChanged(nameof(ValueCount));
@@ -133,15 +131,18 @@ namespace CVAiO.Bplus.Algorithm
             set => runParams = value;
         }
 
+        [InputParam, Browsable(false)]
+        public bool InspectionResult { get => inspectionResult; set => inspectionResult = value; }
+
+        [InputParam, Browsable(false)]
+        public Execution Calc { get => calc; set => calc = value; }
+
         [OutputParam, Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Image OutImage { get => outImage; set => outImage = value; }
 
-        [InputParam, Browsable(false), Description("Vision Algorithm Execute"), Category("4. Input"), PropertyOrder(11)]
-        public Execution Calc { get => calc; set => calc = value; }
-
         [Browsable(false)]
         public bool AlgoJudgement { get => algoJudgement; set => algoJudgement = value; }
-        
+
         #endregion
 
         public AlgoStandard()
@@ -151,7 +152,7 @@ namespace CVAiO.Bplus.Algorithm
             name = "AlgoStandard";
             ToolColor = System.Drawing.Color.Orange;
             RunParams.PropertyChanged += RunParams_PropertyChanged;
-            ValueCount = 2;
+            ValueCount = 0;
         }
 
         public AlgoStandard(SerializationInfo info, StreamingContext context) : base(info, context)
@@ -165,6 +166,7 @@ namespace CVAiO.Bplus.Algorithm
             inParams.Add("InImage", null);
             inParams.Add("Value0", null);
             inParams.Add("Value1", null);
+            inParams.Add("InspectionResult", null);
             inParams.Add("Calc", null);
         }
         public override void InitOutParams()
@@ -197,22 +199,23 @@ namespace CVAiO.Bplus.Algorithm
             if (inParams.Keys.FirstOrDefault(x => inParams[x] == null) != null) return;
             if (inParams.Values.FirstOrDefault(x => x.Value == null) != null) return;
             DateTime lastProcessTimeStart = DateTime.Now;
-            if (inImage == null || inImage.Width == 0 || inImage.Height == 0)
-                throw new Exception("InputImage = Null");
-            if (inParams.Count - 2 != valueCount)
-            {
-                ValueCount = inParams.Count - 2;
-                throw new Exception("Input Value != Value Count");
-            }
             try
             {
+                if (inImage == null || inImage.Width == 0 || inImage.Height == 0)
+                    throw new Exception("InputImage = Null");
+                if (inParams.Keys.Count(x => x.Contains("Value")) != valueCount)
+                {
+                    ValueCount = inParams.Keys.Count(x => x.Contains("Value"));
+                    throw new Exception("Input Value != Value Count");
+                }
+
                 if (OutImage != null) OutImage.Dispose();
                 OutImage = InImage.Clone(true);
                 outputImageInfo.Image = OutImage;
                 algoJudgement = true;
                 // Kiểm tra tất cả các giá trị đưa vào có nằm trong Spec cho phép hay không
                 for (int i = 0; i < 10; i++)
-                    if (inParams.ContainsKey(string.Format("Value{0}", i)))   
+                    if (inParams.ContainsKey(string.Format("Value{0}", i)))
                     {
                         PropertyEx upper = RunParams.CustomProperties.FirstOrDefault(x => x.Name.Contains(string.Format("Upper Value {0}", i)));
                         PropertyEx lower = RunParams.CustomProperties.FirstOrDefault(x => x.Name.Contains(string.Format("Lower Value {0}", i)));
@@ -224,6 +227,8 @@ namespace CVAiO.Bplus.Algorithm
                         else
                             throw new Exception(string.Format("Value0: Could not find Upper/Lower Value {0}", i));
                     }
+                if (inParams.ContainsKey("InspectionResult"))
+                    algoJudgement = inspectionResult;
                 RunStatus = new RunStatus(EToolResult.Accept, "Succcess", DateTime.Now.Subtract(lastProcessTimeStart).TotalMilliseconds, DateTime.Now.Subtract(lastProcessTimeStart).TotalMilliseconds, null);
                 OnRan();
             }
@@ -431,8 +436,8 @@ namespace CVAiO.Bplus.Algorithm
         {
             return this;
         }
-        
+
         #endregion
     }
-   
+
 }
