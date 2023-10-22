@@ -6,7 +6,6 @@ Với mục tiêu giảm thiểu thời gian phát triển một chương trình
 Website: aiomatrix.vn <br />
 Email: info@aiomatrix.vn<br />
 Mobile: 035.831.2826 <br />
-Facebook: aio-matrix<br />
 Zalo: 035.831.2826<br />
 Youtube: [tutorial playlist](https://www.youtube.com/playlist?list=PLqDyBQNoY4fkGBD0NA2EsJX-ZQgd3iBgo)<br />
 Facebook: [Aiomatrix - Machine Vision Platform](https://www.facebook.com/Aiomatrix.MachineVisionPlatform)
