@@ -19,6 +19,12 @@ namespace CVAiO.Bplus.HByUser
     // https://www.mvtec.com/doc/halcon/13/en/toc_ocr_convolutionalneuralnets.html
     // CNN có độ chính xác cao hơn Mlp nhưng tack time cao hơn
     // Nên sử dụng CNN
+
+    // Tham khảo video cài đặt:
+    // https://youtu.be/nvjYSJLApHM?si=ARvMbCrkqgTdey-f
+    // Kết quả tại:
+    // https://youtu.be/sDu9-u3QKxI?si=9toCEBFfZeUnN7YK
+
     [Serializable]
     public class HOCRCnn : ToolBase
     {

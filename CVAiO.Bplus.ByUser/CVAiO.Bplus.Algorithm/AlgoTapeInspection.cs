@@ -13,6 +13,11 @@ using System.Reflection;
 
 namespace CVAiO.Bplus.Algorithm
 {
+    // Tham khảo video cài đặt tại:
+    // https://youtu.be/b_BW5kqAl58?si=0yPMT3Ni1fWnhKIw
+    // Kết quả;
+    // https://youtu.be/6GH0Erk7SpM?si=PW2Z2OQArjx-WUcz
+
     [Serializable]
     public class AlgoTapeInspection : ToolBase, IAlgorithm
     {

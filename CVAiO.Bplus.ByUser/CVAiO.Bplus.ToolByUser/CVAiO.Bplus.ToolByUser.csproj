@@ -97,6 +97,7 @@
     <Compile Include="Yolo\Yolov7.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Note.txt" />
     <Content Include="Yolo\Note.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

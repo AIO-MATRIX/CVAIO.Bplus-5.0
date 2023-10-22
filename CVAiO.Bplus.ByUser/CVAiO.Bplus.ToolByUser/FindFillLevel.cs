@@ -12,6 +12,11 @@ using System.IO;
 
 namespace CVAiO.Bplus.ToolByUser
 {
+    // Tham khảo video setting tại:
+    // https://youtu.be/wEJXDEYiuhU?si=iUL5HNtlBDY3S9k9
+    // Kết quả tại:
+    // https://youtu.be/jk2_6ARA7yA?si=9rz71ViXEvbw1CEd
+
     [Serializable]
     public class FindFillLevel : ToolBase
     {

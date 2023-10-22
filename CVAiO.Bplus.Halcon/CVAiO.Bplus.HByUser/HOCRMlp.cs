@@ -17,6 +17,12 @@ using System.Windows.Forms.Design;
 namespace CVAiO.Bplus.HByUser
 {
     // https://www.mvtec.com/doc/halcon/13/en/toc_ocr_neuralnets.html
+
+    // Tham khảo video cài đặt:
+    // https://youtu.be/nvjYSJLApHM?si=ARvMbCrkqgTdey-f
+    // Kết quả tại:
+    // https://youtu.be/sDu9-u3QKxI?si=9toCEBFfZeUnN7YK
+
     [Serializable]
     public class HOCRMlp : ToolBase
     {
