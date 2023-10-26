@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BallBondInspection.cs" />
     <Compile Include="BlobFill.cs" />
     <Compile Include="FindFillLevel.cs" />
     <Compile Include="InspectionAI.cs" />

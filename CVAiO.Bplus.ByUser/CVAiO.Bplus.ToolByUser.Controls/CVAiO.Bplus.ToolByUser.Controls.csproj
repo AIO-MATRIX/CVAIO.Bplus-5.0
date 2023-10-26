@@ -86,6 +86,12 @@
     <Compile Include="BlobFillEdit.Designer.cs">
       <DependentUpon>BlobFillEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="BallBondInspectionEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BallBondInspectionEdit.Designer.cs">
+      <DependentUpon>BallBondInspectionEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="FindFillLevelEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
