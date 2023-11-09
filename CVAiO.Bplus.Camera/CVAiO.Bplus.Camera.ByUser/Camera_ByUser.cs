@@ -163,6 +163,9 @@ namespace CVAiO.Bplus.Device.ByUser
                         Cam.Open();
                     }
                     Cam.Parameters[PLCamera.AcquisitionMode].SetValue(PLCamera.AcquisitionMode.SingleFrame);
+                    Cam.Parameters[PLCamera.PixelFormat].SetValue(PLCamera.PixelFormat.Mono8);
+                    //for Color Camera
+                    //Cam.Parameters[PLCamera.PixelFormat].SetValue(PLCamera.PixelFormat.BayerGR8);
                     Cam.StreamGrabber.Start(1L, GrabStrategy.LatestImages, GrabLoop.ProvidedByStreamGrabber);
                     stopWatch.Reset();
                     stopWatch.Start();
@@ -210,7 +213,14 @@ namespace CVAiO.Bplus.Device.ByUser
                     {
                         ((DisposableObject)Image).Dispose();
                     }
+                    // Mono Camera
                     Image = new Mat(grabResult.Height, grabResult.Width, MatType.CV_8UC1, (Array)(grabResult.PixelData as byte[]), 0L);
+
+                    // Color Camera
+                    //Image = new Mat();
+                    //Mat raw = new Mat(grabResult.Height, grabResult.Width, MatType.CV_8UC1, (Array)(grabResult.PixelData as byte[]), 0L);
+                    // Cần chuyển đổi định dạng ảnh phía trên thành BayerGR2
+                    //CVAiO2.CvtColor(raw, Image, ColorConversionCodes.BayerGR2RGB);
                     IsGrabSuccess = true;
                 }
                 else
