@@ -58,6 +58,10 @@
     <Reference Include="CVAiO.Bplus.Core">
       <HintPath>..\..\Debug\CVAiO.Bplus.Core.dll</HintPath>
     </Reference>
+    <Reference Include="CVAiO.Bplus.ImageProcessing, Version=5.0.1.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Debug\CVAiO.Bplus.ImageProcessing.dll</HintPath>
+    </Reference>
     <Reference Include="CVAiO.Bplus.Lighting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Debug\CVAiO.Bplus.Lighting.dll</HintPath>
@@ -81,6 +85,7 @@
   <ItemGroup>
     <Compile Include="BallBondInspection.cs" />
     <Compile Include="BlobFill.cs" />
+    <Compile Include="ConnectorInspection.cs" />
     <Compile Include="FindFillLevel.cs" />
     <Compile Include="InspectionAI.cs" />
     <Compile Include="InspectionAIRunParams.cs" />

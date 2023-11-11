@@ -55,6 +55,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Debug\CVAiO.Bplus.Core.dll</HintPath>
     </Reference>
+    <Reference Include="CVAiO.Bplus.ImageProcessing.Controls, Version=5.0.1.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Debug\CVAiO.Bplus.ImageProcessing.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="CVAiO.Bplus.Lighting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Debug\CVAiO.Bplus.Lighting.dll</HintPath>
@@ -91,6 +95,12 @@
     </Compile>
     <Compile Include="BallBondInspectionEdit.Designer.cs">
       <DependentUpon>BallBondInspectionEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConnectorInspectionEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConnectorInspectionEdit.Designer.cs">
+      <DependentUpon>ConnectorInspectionEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="FindFillLevelEdit.cs">
       <SubType>UserControl</SubType>

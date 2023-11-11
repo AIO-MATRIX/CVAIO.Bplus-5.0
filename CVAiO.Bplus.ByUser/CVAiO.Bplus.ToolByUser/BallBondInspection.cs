@@ -12,6 +12,10 @@ using System.IO;
 
 namespace CVAiO.Bplus.ToolByUser
 {
+    // Tham khảo video setting tại:
+    // https://youtu.be/LmsKSqrACpI?si=OMhcxlnJ_VK_PslY
+    // Kết quả tại:
+    // https://youtu.be/oJFWKhVK54Y?si=UAFP5S_2Hv6K573y
     public struct InspectionDetail
     {
         public bool status;
