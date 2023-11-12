@@ -86,6 +86,7 @@
     <Compile Include="BallBondInspection.cs" />
     <Compile Include="BlobFill.cs" />
     <Compile Include="ConnectorInspection.cs" />
+    <Compile Include="FittingCircle.cs" />
     <Compile Include="FindFillLevel.cs" />
     <Compile Include="InspectionAI.cs" />
     <Compile Include="InspectionAIRunParams.cs" />

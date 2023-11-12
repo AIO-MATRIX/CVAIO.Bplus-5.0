@@ -102,6 +102,12 @@
     <Compile Include="ConnectorInspectionEdit.Designer.cs">
       <DependentUpon>ConnectorInspectionEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="FittingCircleEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FittingCircleEdit.Designer.cs">
+      <DependentUpon>FittingCircleEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="FindFillLevelEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>

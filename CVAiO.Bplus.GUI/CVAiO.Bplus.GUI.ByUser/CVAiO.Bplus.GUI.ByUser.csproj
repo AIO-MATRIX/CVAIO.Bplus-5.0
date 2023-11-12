@@ -90,6 +90,7 @@
     <Compile Include="RecipeParams.cs" />
     <Compile Include="SchedulerByUser.cs" />
     <Compile Include="SchOcrInspect.cs" />
+    <Compile Include="SchPlateInspection.cs" />
     <Compile Include="SchTapeAlign2P_Object2Target.cs" />
     <Compile Include="SchObjectAlign2P.cs" />
     <Compile Include="SchObjectAlign1P.cs" />
