@@ -1,0 +1,10 @@
+﻿
+Sử dụng ModbusRTU để giao tiếp với các client khác sử dụng chuẩn truyền thông modbus
+
+Hướng dẫn sử dụng:
+Bước 1: Xóa bỏ toàn bộ các class của ByUser đang sử dụng
+Bước 2: Sửa tên của các lớp của modbusRTU, xóa bỏ _ModbusRTU khỏi tên lớp
+Bước 3: Uncomment cả 3 lớp: ByUser_ModbusRTU, Data_ByUser_ModbusRTU, IO_ByUser_ModbusRTU
+Bước 4: Setup PLC theo chuẩn modbus slave
+
+Liên hệ zalo của AIO-MATRIX nếu cần được hộ trợ (035.831.2826)

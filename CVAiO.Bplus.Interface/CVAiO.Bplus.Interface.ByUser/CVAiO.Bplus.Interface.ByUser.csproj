@@ -65,9 +65,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ByUser.cs" />
+    <Compile Include="ByUser_ModbusRTU.cs" />
     <Compile Include="Data_ByUser.cs" />
+    <Compile Include="Data_ByUser_ModbusRTU.cs" />
     <Compile Include="IO_ByUser.cs" />
+    <Compile Include="IO_ByUser_ModbusRTU.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Note.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
