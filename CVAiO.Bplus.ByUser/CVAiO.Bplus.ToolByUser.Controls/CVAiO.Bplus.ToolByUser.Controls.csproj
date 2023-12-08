@@ -114,6 +114,12 @@
     <Compile Include="FindFillLevelEdit.Designer.cs">
       <DependentUpon>FindFillLevelEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="GlueBeadInspectionEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GlueBeadInspectionEdit.Designer.cs">
+      <DependentUpon>GlueBeadInspectionEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="InspectionAIEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
