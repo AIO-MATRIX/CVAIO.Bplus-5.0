@@ -78,13 +78,13 @@ namespace CVAiO.Bplus.HByUser
         [OutputParam, Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Image OutImage { get => outImage; set => outImage = value; }
 
-        [Category("4. Output"), PropertyOrder(12), Browsable(false)]
+        [OutputParam, Category("4. Output"), PropertyOrder(12), Browsable(false)]
         public List<char> ListChar { get => listChar; set => listChar = value; }
 
-        [Category("4. Output"), PropertyOrder(13), Browsable(false)]
+        [OutputParam, Category("4. Output"), PropertyOrder(13), Browsable(false)]
         public List<Point2f> ListPosition { get => listPosition; set => listPosition = value; }
 
-        [Category("4. Output"), PropertyOrder(14), ReadOnly(true)]
+        [OutputParam, Category("4. Output"), PropertyOrder(14), ReadOnly(true)]
         public string DataOCR { get => dataOCR; set => dataOCR = value; }
 
         #endregion
@@ -184,8 +184,8 @@ namespace CVAiO.Bplus.HByUser
                 dataOCR = "";
                 HImage hImage = new HImage("byte", OutImage.Mat.Width, OutImage.Mat.Height, OutImage.Mat.Data);
                 Blobs.OrderBy(x => x.Left);
-                listChar.Clear();
-                listPosition.Clear();
+                listChar = new List<char>();
+                listPosition = new List<Point2f>();
                 List<ConnectedComponents.Blob> filteredBlobs = Blobs.FindAll(x =>
                                     x.Left > RunParams.SearchRegion.X && x.Left + x.Width < RunParams.SearchRegion.X + RunParams.SearchRegion.Width
                                     && x.Top > RunParams.SearchRegion.Y && x.Top + x.Height < RunParams.SearchRegion.Y + RunParams.SearchRegion.Height);

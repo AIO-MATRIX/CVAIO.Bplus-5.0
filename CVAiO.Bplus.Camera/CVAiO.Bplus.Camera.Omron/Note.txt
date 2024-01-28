@@ -1,0 +1,18 @@
+﻿Bước 1: Download và cài đặt SDK
+- Truy cập vào trang web của Omron Sentech
+https://industrial.omron.eu/en/products/STC-MBS312POE#software
+- Kéo xuống và chuyển sang tab software
+- Chọn download Sentech SDK V1.1.2 và cài đặt sử dụng cài đặt mặc định
+
+Bước 2: Giải nén và paste CVAiO.Bplus.Camera.Omron vào folder CVAiO.Bplus.Camera 
+- Cùng trong folder còn có CVAiO.Bplus.Camera.ByUser
+
+Bước 3: Load project của camera omron vào Solution
+- Chuột phải vào folder CVAiO.Bplus.Camera trong Solution
+- Chọn Add -> Existing Project -> Chọn tới file CVAiO.Bplus.Camera.Omron.csproj trong project CVAiO.Bplus.Camera.Omron
+
+Bước 4: Kiểm tra các file dll của omron sentech có đúng vị trí sau hay không
+- GenApiDotNet40_v3_2: C:\Program Files\Common Files\OMRON_SENTECH\StApi\v1_1\GenApiDotNet40_v3_2.dll
+- StApiDotNet40_v1_1: C:\Program Files\Common Files\OMRON_SENTECH\StApi\v1_1\StApiDotNet40_v1_1.dll
+
+Contact: Zalo 035.831.2826 để được hỗ trợ
